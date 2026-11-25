@@ -14,7 +14,7 @@ export default defineConfig({
       hero: ['./src/assets/hero-1.svg', './src/assets/hero-2.svg'],
       info: [{ key: 'Profile', value: 'Your profile' }],
       nav: [
-        { label: 'Home', children: [{ label: 'Top', href: '/' }, { label: 'Categories', href: '/categories/' }, { label: 'Tags', href: '/tags/' }] },
+        { label: 'Home', children: [{ label: 'Top', href: '/' }, { label: 'Categories', href: '/categories/' }, { label: 'Tags', href: '/tags/' }, { label: 'Archives', href: '/archives/' }] },
         { label: 'Topics', children: [{ label: 'Astro', href: '/tags/Astro/' }, { label: 'CSS', href: '/tags/CSS/' }, { label: 'JavaScript', href: '/tags/JavaScript/' }] },
         { label: 'Tech', href: '/categories/Tech/' },
         { label: 'Design', href: '/categories/Design/' },

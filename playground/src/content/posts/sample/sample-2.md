@@ -1,7 +1,7 @@
 ---
 title: サンプル記事 2
-date: 2026-01-02
-permalink: 2026/01/02/sample/sample-2
+date: 2025-12-02
+permalink: 2025/12/02/sample/sample-2
 categories: Design
 tags: CSS
 ---

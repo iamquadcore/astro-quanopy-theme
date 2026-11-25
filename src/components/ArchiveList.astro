@@ -1,0 +1,17 @@
+---
+import { formatDate, type Post } from '../lib/posts';
+// 記事を年ごとに区切り、日付とタイトルだけを並べる
+interface Props { years: [year: string, posts: Post[]][] }
+const { years } = Astro.props;
+---
+{years.map(([year, posts]) => (
+  <section class="archive-year">
+    <div class="section-head"><h2><a href={`/archives/${year}/`}>{year}</a></h2><span>{String(posts.length).padStart(2, '0')}</span></div>
+    <ul class="archive-list">
+      {posts.map(({ data }) => (
+        <li><a href={`/${data.permalink}/`}><time datetime={data.date.toISOString().slice(0, 10)}>{formatDate(data.date)}</time><span>{data.title}</span></a></li>
+      ))}
+    </ul>
+    <slot />
+  </section>
+))}

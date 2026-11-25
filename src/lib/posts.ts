@@ -33,6 +33,16 @@ export function countBy(posts: Post[], key: 'tags' | 'categories') {
 
 export type OgImage = { src: string; width: number; height: number };
 
+// 年ごとに分ける。並びは渡された順のまま
+export function byYear(posts: Post[]): [year: string, posts: Post[]][] {
+  const map = new Map<string, Post[]>();
+  for (const p of posts) {
+    const year = String(p.data.date.getUTCFullYear());
+    map.set(year, [...(map.get(year) ?? []), p]);
+  }
+  return [...map];
+}
+
 // public/ からのパスか URL。img/a.jpg は /img/a.jpg として扱う
 export const asUrl = (v: string) => (/^(https?:)?\//.test(v) ? v : '/' + v);
 // 大きさの分からない画像は 1200×630 とみなす

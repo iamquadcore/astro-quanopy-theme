@@ -84,6 +84,10 @@ twitter: '@example',
 
 `headingIds: 'hexo'` にすると、見出しの ID が Hexo と同じ形 (大文字を保つ) になります。Hexo から移した記事の目次や、外部からの `#` 付きリンクがそのまま使えます。
 
+### 一覧ページ
+
+`/tags/`、`/categories/`、`/archives/` (年ごとは `/archives/2026/` など) は自動で作られます。
+
 ### 検索
 
 ヘッダーの検索ボタンか Ctrl+K で開きます。`search: false` でオフになります。

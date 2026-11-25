@@ -1,0 +1,9 @@
+---
+import ArchiveList from '../../components/ArchiveList.astro';
+import Layout from '../../layouts/Layout.astro';
+import { byYear, getListedPosts } from '../../lib/posts';
+const years = byYear(await getListedPosts());
+---
+<Layout title="Archives" heading="Archives">
+  <ArchiveList years={years} />
+</Layout>

@@ -1,7 +1,7 @@
 ---
 title: サンプル記事 1
-date: 2026-01-01
-permalink: 2026/01/01/sample/sample-1
+date: 2025-12-01
+permalink: 2025/12/01/sample/sample-1
 categories: Tech
 tags: Astro
 ---

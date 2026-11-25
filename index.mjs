@@ -57,6 +57,8 @@ export default function quanopy(options = {}) {
           ['/page/[page]', 'page/[page].astro'],
           ['/tags', 'tags/index.astro'],
           ['/categories', 'categories/index.astro'],
+          ['/archives', 'archives/index.astro'],
+          ['/archives/[year]', 'archives/[year].astro'],
           ...(site.search ? [['/search.json', 'search.json.ts']] : []),
           ['/tags/[tag]', 'tags/[tag].astro'],
           ['/categories/[category]', 'categories/[category].astro'],

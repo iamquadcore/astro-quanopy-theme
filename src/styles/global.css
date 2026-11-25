@@ -116,7 +116,7 @@ a { color: inherit; text-decoration: none; }
 .hero-bg {
   position: absolute;
   z-index: -1;
-  inset: 0 var(--hero-inset) auto;
+  inset: 0 min(var(--hero-inset), max(8px, (100% - var(--page-width)) / 2 - 16px)) auto; /* 画面が狭いときは、記事一覧が背景画像からはみ出さないように余白を詰める */
   height: var(--hero-height);
   max-height: 100%;
   -webkit-mask-image: linear-gradient(#000 var(--fade-start), transparent);
@@ -132,7 +132,7 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   place-items: center;
   min-height: 80px;
-  margin: 0 var(--hero-inset);
+  margin: 0 min(var(--hero-inset), max(8px, (100% - var(--page-width)) / 2 - 16px));
   border-radius: var(--radius);
   background: var(--panel);
   color: var(--panel-text);
@@ -276,6 +276,20 @@ body { padding-top: 10px; }
 .term-list a { display: block; padding: 4px 16px; border: 1px solid var(--line); border-radius: 8px; }
 .term-list a:hover { color: var(--accent); }
 
+/* アーカイブ */
+.archive-year { padding: 30px 40px 16px; border-radius: var(--radius); background: var(--panel); color: var(--panel-text); backdrop-filter: blur(6px); }
+.archive-year + .archive-year { margin-top: 24px; }
+.archive-year .section-head { margin-bottom: 8px; color: inherit; text-shadow: none; }
+.archive-year .section-head::after { border-color: var(--border); }
+.archive-list { margin: 0; padding: 0; list-style: none; }
+.archive-list li + li { border-top: 2px dotted var(--border); }
+.archive-list a { display: grid; grid-template-columns: 90px minmax(0, 1fr); align-items: baseline; padding: 14px 8px; overflow-wrap: anywhere; }
+.archive-list a:hover { color: var(--accent); }
+.archive-list time { font-size: 13px; letter-spacing: .08em; }
+.archive-list span { font-weight: 600; line-height: 1.6; }
+.archive-all { margin: 16px 0 8px; text-align: right; }
+.archive-all a { color: var(--link); text-decoration: underline; }
+
 /* 横長カード */
 .card-row { display: grid; grid-template-columns: 198px minmax(0, 1fr); gap: 20px; padding: 16px; }
 .card-row .card-cover { align-self: start; border-radius: 6px; font-size: 18px; }
@@ -385,6 +399,8 @@ body { padding-top: 10px; }
   .header-inner { column-gap: 6px; padding-inline: 14px; }
   .logo { gap: 8px; font-size: 18px; }
   .grid { grid-template-columns: minmax(0, 1fr); }
+  .archive-year { padding: 20px 16px 8px; }
+  .archive-list a { grid-template-columns: minmax(0, 1fr); gap: 2px; padding-inline: 4px; }
   .card-row { grid-template-columns: 120px minmax(0, 1fr); gap: 14px; }
   .card-row .card-excerpt { display: none; }
 }

@@ -1,0 +1,18 @@
+---
+import ArchiveList from '../../components/ArchiveList.astro';
+import Layout from '../../layouts/Layout.astro';
+import { byYear, getListedPosts, type Post } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  return byYear(await getListedPosts()).map(([year, posts]) => ({ params: { year }, props: { posts } }));
+}
+
+interface Props { posts: Post[] }
+const { year } = Astro.params as { year: string };
+const { posts } = Astro.props;
+---
+<Layout title={`Archives: ${year}`} heading={year}>
+  <ArchiveList years={[[year, posts]]}>
+    <p class="archive-all"><a href="/archives/">すべての年を見る</a></p>
+  </ArchiveList>
+</Layout>

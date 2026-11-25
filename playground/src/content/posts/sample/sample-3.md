@@ -1,7 +1,7 @@
 ---
 title: サンプル記事 3
-date: 2026-01-03
-permalink: 2026/01/03/sample/sample-3
+date: 2025-12-03
+permalink: 2025/12/03/sample/sample-3
 categories: Notes
 tags: Diary
 ---

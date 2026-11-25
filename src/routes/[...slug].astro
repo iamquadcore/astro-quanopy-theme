@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
+import OtherArticles from '../components/OtherArticles.astro';
 import PostMeta from '../components/PostMeta.astro';
 
 export async function getStaticPaths() {
@@ -11,7 +12,8 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 ---
-<Layout title={post.data.title} heading={post.data.title} subheading={String(post.data.date.getUTCFullYear())}>
+<Layout title={post.data.title} heading={post.data.title}>
   <PostMeta date={post.data.date} />
   <article class="prose"><Content /></article>
+  <OtherArticles post={post} />
 </Layout>

@@ -11,7 +11,11 @@ import { site } from 'virtual:quanopy/config';
 </header>
 <script>
   document.querySelector('.theme-toggle')?.addEventListener('click', () => {
-    const dark = document.documentElement.classList.toggle('dark');
+    const root = document.documentElement;
+    // 変化前の色を確定させてから切り替える(読み込み時にはフェードさせない)
+    root.classList.add('theme-fade');
+    getComputedStyle(root).getPropertyValue('--bg');
+    const dark = root.classList.toggle('dark');
     try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
   });
 

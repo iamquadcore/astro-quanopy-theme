@@ -1,19 +1,19 @@
 ---
 import { Image } from 'astro:assets';
 import { excerpt, formatDate, formatTime, plainText, toArray, type Post } from '../lib/posts';
-// row: 横長カード(画像が左)
-interface Props { post: Post; row?: boolean }
-const { post, row = false } = Astro.props;
+// row: 横長カード(画像が左)、brief: 書き出しを省き、タイトルを1行にする
+interface Props { post: Post; row?: boolean; brief?: boolean }
+const { post, row = false, brief = false } = Astro.props;
 const { title, date, categories, permalink, cover } = post.data;
 const category = toArray(categories).join(' / ');
 const text = plainText(post.body);
 // 文字列の cover は / や http で始まるものだけ URL として使う
 const coverUrl = typeof cover === 'string' && /^(https?:)?\//.test(cover) ? cover : undefined;
 ---
-<article class:list={['card', { 'card-row': row }]}>
+<article class:list={['card', { 'card-row': row, 'card-brief': brief }]}>
   <div class="card-cover">
     {cover && typeof cover !== 'string' ? (
-      <Image src={cover} alt="" width={Math.min(cover.width, row ? 440 : 1086)} loading={row ? 'lazy' : 'eager'} />
+      <Image src={cover} alt="" width={Math.min(cover.width, row ? 440 : 1086)} loading={row || brief ? 'lazy' : 'eager'} />
     ) : coverUrl ? (
       <img src={coverUrl} alt="" loading="lazy" />
     ) : (
@@ -23,7 +23,7 @@ const coverUrl = typeof cover === 'string' && /^(https?:)?\//.test(cover) ? cove
   <div class="card-body">
     <p class="card-category">{category}</p>
     <h3><a href={'/' + permalink + '/'}>{title}</a></h3>
-    <p class="card-excerpt">{excerpt(post.body)}</p>
+    {!brief && <p class="card-excerpt">{excerpt(post.body)}</p>}
     <p class="card-meta">{formatDate(date)}{!row && <Fragment> • {formatTime(date)} • {text.replace(/\s/g, '').length}</Fragment>}</p>
   </div>
 </article>

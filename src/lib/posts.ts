@@ -8,6 +8,13 @@ export async function getListedPosts() {
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
+// 同じタグを1つでも持つ記事を新しい順に返す(自分自身は除く)
+export async function getRelatedPosts(post: Post, max = 2) {
+  const tags = toArray(post.data.tags);
+  const posts = await getListedPosts();
+  return posts.filter((p) => p.id !== post.id && toArray(p.data.tags).some((t) => tags.includes(t))).slice(0, max);
+}
+
 export const pageCount = (total: number, per: number) => Math.max(1, Math.ceil(total / per));
 
 export const toArray = (v?: string | string[]) =>
@@ -51,5 +58,4 @@ const pad = (n: number) => String(n).padStart(2, '0');
 // front-matter の日付は UTC として読まれるため、UTC で出せば書いた日付のまま表示される
 export const formatDate = (d: Date) =>
   [d.getUTCFullYear() % 100, d.getUTCMonth() + 1, d.getUTCDate()].map(pad).join('/');
-export const formatMonthDay = (d: Date) => [d.getUTCMonth() + 1, d.getUTCDate()].map(pad).join('/');
 export const formatTime = (d: Date) => [d.getUTCHours(), d.getUTCMinutes()].map(pad).join(':');

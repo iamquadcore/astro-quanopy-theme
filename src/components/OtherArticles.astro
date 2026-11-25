@@ -1,0 +1,12 @@
+---
+import PostCard from './PostCard.astro';
+import { getRelatedPosts, type Post } from '../lib/posts';
+interface Props { post: Post }
+const posts = await getRelatedPosts(Astro.props.post);
+---
+{posts.length > 0 && (
+  <section class="other-articles">
+    <div class="section-head"><h2>Other Articles</h2><span>{String(posts.length).padStart(2, '0')}</span></div>
+    <div class="grid">{posts.map((post) => <PostCard post={post} brief />)}</div>
+  </section>
+)}

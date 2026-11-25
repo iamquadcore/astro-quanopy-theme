@@ -2,6 +2,11 @@ import type { AstroIntegration } from 'astro';
 
 interface Link { label: string; href: string }
 
+interface SocialLink extends Link {
+  /** Font Awesome のクラス (例: 'fa-brands fa-github')。省略すると label を文字で表示する */
+  icon?: string;
+}
+
 export interface QuanopyOptions {
   title?: string;
   subtitle?: string;
@@ -24,7 +29,7 @@ export interface QuanopyOptions {
   };
   info?: { key: string; value: string }[];
   nav?: Link[];
-  social?: Link[];
+  social?: SocialLink[];
   /** 背景画像。サイトのルートからのパス (例: './src/assets/hero.jpg') */
   hero?: string;
   /** アバター画像。サイトのルートからのパス */

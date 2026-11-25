@@ -14,6 +14,6 @@ declare module 'virtual:quanopy/config' {
     footer: { since?: number };
     info: { key: string; value: string }[];
     nav: Link[];
-    social: Link[];
+    social: (Link & { icon?: string })[];
   };
 }

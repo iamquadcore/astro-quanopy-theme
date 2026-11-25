@@ -18,8 +18,8 @@ export default defineConfig({
         { label: 'Contact(JP)', href: '#' },
       ],
       social: [
-        { label: 'GitHub', href: 'https://github.com/' },
-        { label: 'YouTube', href: 'https://www.youtube.com/' },
+        { label: 'GitHub', href: 'https://github.com/', icon: 'fa-brands fa-github' },
+        { label: 'YouTube', href: 'https://www.youtube.com/', icon: 'fa-brands fa-youtube' },
       ],
     }),
   ],

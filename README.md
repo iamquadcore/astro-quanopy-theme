@@ -40,6 +40,14 @@ export const collections = { posts: defineCollection(postsCollection()) };
 
 トップページは12件ごとにページを分けます。`quanopy({ postsPerPage: 9 })` のように変えられます。先頭の大きいカードの数は `featured` (既定: 2) です。
 
+サイドバーのリンクは `icon` に [Font Awesome Free](https://fontawesome.com/search?ic=free) のクラスを書くとアイコンになります。`label` は読み上げとツールチップに使われます。
+
+```js
+quanopy({
+  social: [{ label: 'GitHub', href: 'https://github.com/', icon: 'fa-brands fa-github' }],
+})
+```
+
 ## 記事
 
 `src/content/posts/` に Markdown を置きます。`permalink` がそのまま URL になります。
@@ -72,4 +80,4 @@ npm run dev
 
 [MIT](./LICENSE)
 
-アイコンは [Lucide](https://lucide.dev/) のものです。ライセンスは [src/assets/icons/LICENSE](./src/assets/icons/LICENSE) を見てください。
+アイコンは [Lucide](https://lucide.dev/) のものです。ライセンスは [src/assets/icons/LICENSE](./src/assets/icons/LICENSE) を見てください。サイドバーのリンクのアイコンは [Font Awesome Free](https://fontawesome.com/license/free) (アイコン: CC BY 4.0、フォント: SIL OFL 1.1、コード: MIT) です。

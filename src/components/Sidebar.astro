@@ -8,7 +8,11 @@ const tags = countBy(await getListedPosts(), 'tags');
   <p class="name">{site.author.name}</p>
   <p class="bio">{site.author.bio}</p>
   <hr />
-  <ul class="social">{site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}</ul>
+  <ul class="social">{site.social.map((s) => (
+    <li>{s.icon
+      ? <a class="social-icon" href={s.href} rel="noopener" aria-label={s.label} title={s.label}><i class={s.icon} aria-hidden="true"></i></a>
+      : <a href={s.href} rel="noopener">{s.label}</a>}</li>
+  ))}</ul>
   <hr />
   <dl>{site.info.map((i) => <div><dt>{i.key}:</dt><dd>{i.value}</dd></div>)}</dl>
   <hr />

@@ -1,0 +1,15 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import PostGrid from '../../components/PostGrid.astro';
+import { countBy, getListedPosts, toArray, toSlug } from '../../lib/posts';
+
+export async function getStaticPaths() {
+  const all = await getListedPosts();
+  return countBy(all, 'categories').map(([name]) => ({
+    params: { category: toSlug(name) },
+    props: { name, posts: all.filter((x) => toArray(x.data.categories).includes(name)) },
+  }));
+}
+const { name, posts } = Astro.props;
+---
+<Layout title={name} heading={name}><PostGrid title={name} posts={posts} /></Layout>

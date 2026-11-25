@@ -1,0 +1,17 @@
+---
+import { formatDate, formatTime, plainText, toArray, type Post } from '../lib/posts';
+interface Props { post: Post }
+const { post } = Astro.props;
+const { title, date, categories, permalink } = post.data;
+const category = toArray(categories).join(' / ');
+const text = plainText(post.body);
+---
+<article class="card">
+  <div class="card-cover" aria-hidden="true">{category}</div>
+  <div class="card-body">
+    <p class="card-category">{category}</p>
+    <h3><a href={'/' + permalink + '/'}>{title}</a></h3>
+    <p class="card-excerpt">{text.slice(0, 160)}</p>
+    <p class="card-meta">{formatDate(date)} • {formatTime(date)} • {text.replace(/\s/g, '').length}</p>
+  </div>
+</article>

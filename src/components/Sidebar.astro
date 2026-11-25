@@ -1,0 +1,16 @@
+---
+import { site } from '../site.config';
+import { countBy, getListedPosts, toSlug } from '../lib/posts';
+const tags = countBy(await getListedPosts(), 'tags');
+---
+<aside class="sidebar">
+  <img class="avatar" src={site.author.avatar.src} alt="" width="104" height="104" />
+  <p class="name">{site.author.name}</p>
+  <p class="bio">{site.author.bio}</p>
+  <hr />
+  <ul class="social">{site.social.map((s) => <li><a href={s.href} rel="noopener">{s.label}</a></li>)}</ul>
+  <hr />
+  <dl>{site.info.map((i) => <div><dt>{i.key}:</dt><dd>{i.value}</dd></div>)}</dl>
+  <hr />
+  <ul class="tags">{tags.map(([t, n]) => <li><a href={'/tags/' + toSlug(t) + '/'}>{t}（{n}）</a></li>)}</ul>
+</aside>

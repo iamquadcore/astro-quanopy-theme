@@ -1,0 +1,16 @@
+---
+import { site } from '../site.config';
+---
+<header class="header">
+  <div class="header-inner">
+    <a class="logo" href="/"><span class="logo-mark">{site.logo.mark}</span><span>{site.logo.first}<em>{site.logo.last}</em></span></a>
+    <nav aria-label="メイン">{site.nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+    <button class="theme-toggle" type="button" aria-label="ダークモード切り替え"><span></span></button>
+  </div>
+</header>
+<script>
+  document.querySelector('.theme-toggle')?.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
+  });
+</script>

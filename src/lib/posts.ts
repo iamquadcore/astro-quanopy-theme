@@ -1,3 +1,5 @@
+import type { ImageMetadata } from 'astro';
+import { getImage } from 'astro:assets';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export type Post = CollectionEntry<'posts'>;
@@ -27,6 +29,25 @@ export function countBy(posts: Post[], key: 'tags' | 'categories') {
     for (const v of toArray(p.data[key])) map.set(v, (map.get(v) ?? 0) + 1);
   }
   return [...map].sort(([a], [b]) => a.localeCompare(b));
+}
+
+export type OgImage = { src: string; width: number; height: number };
+
+// public/ からのパスか URL。img/a.jpg は /img/a.jpg として扱う
+export const asUrl = (v: string) => (/^(https?:)?\//.test(v) ? v : '/' + v);
+// 大きさの分からない画像は 1200×630 とみなす
+export const asOgImage = (v: string | ImageMetadata): OgImage =>
+  typeof v === 'string' ? { src: asUrl(v), width: 1200, height: 630 } : v;
+
+// OGP 画像の URL。og_image、cover の順に使う
+export async function ogImage({ data: { og_image, cover } }: Post): Promise<OgImage | undefined> {
+  const img = og_image || cover;
+  if (!img) return undefined;
+  if (typeof img === 'string') return asOgImage(img);
+  if (img.format === 'svg') return undefined;
+  const width = Math.min(1200, img.width);
+  const height = Math.round((img.height * width) / img.width);
+  return { src: (await getImage({ src: img, width, height, format: 'jpeg' })).src, width, height };
 }
 
 // Markdown 本文から見出し・目次・画像・記号を除いた地の文を取り出す

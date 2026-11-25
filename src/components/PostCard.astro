@@ -1,14 +1,13 @@
 ---
 import { Image } from 'astro:assets';
-import { excerpt, formatDate, formatTime, plainText, toArray, type Post } from '../lib/posts';
+import { asUrl, excerpt, formatDate, formatTime, plainText, toArray, type Post } from '../lib/posts';
 // row: 横長カード(画像が左)、brief: 書き出しを省き、タイトルを1行にする
 interface Props { post: Post; row?: boolean; brief?: boolean }
 const { post, row = false, brief = false } = Astro.props;
 const { title, date, categories, permalink, cover } = post.data;
 const category = toArray(categories).join(' / ');
 const text = plainText(post.body);
-// 文字列の cover は / や http で始まるものだけ URL として使う
-const coverUrl = typeof cover === 'string' && /^(https?:)?\//.test(cover) ? cover : undefined;
+const coverUrl = cover && typeof cover === 'string' ? asUrl(cover) : undefined;
 ---
 <article class:list={['card', { 'card-row': row, 'card-brief': brief }]}>
   <div class="card-cover">

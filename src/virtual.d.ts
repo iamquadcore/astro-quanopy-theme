@@ -6,14 +6,19 @@ declare module 'virtual:quanopy/config' {
     description: string;
     logo: { mark: string; first: string; last: string };
     author: { name: string; bio: string; avatar: import('astro').ImageMetadata };
-    hero: import('astro').ImageMetadata;
+    hero: import('astro').ImageMetadata[];
+    heroInterval: number;
+    ogImage?: string | import('astro').ImageMetadata;
+    twitter?: string;
+    search: boolean;
+    sitemap: boolean;
     postsPerPage: number;
     featured: number;
     breaks: boolean;
     sidebar: { scroll: boolean };
     footer: { since?: number };
     info: { key: string; value: string }[];
-    nav: Link[];
+    nav: { label: string; href?: string; children?: Link[] }[];
     social: (Link & { icon?: string })[];
   };
 }

@@ -11,6 +11,12 @@ export const defaults = {
   featured: 2,
   // 本文の1回の改行をそのまま改行として表示する
   breaks: true,
+  // サイト内検索
+  search: true,
+  // sitemap.xml を作る
+  sitemap: true,
+  // 背景画像が複数のとき、切り替える間隔 (秒)
+  heroInterval: 7,
   // scroll: サイドバー内をスクロールさせる
   sidebar: { scroll: true },
   // since: 著作権表示の開始年

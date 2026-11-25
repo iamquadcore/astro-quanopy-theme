@@ -4,7 +4,15 @@ import { site } from 'virtual:quanopy/config';
 <header class="header">
   <div class="header-inner">
     <a class="logo" href="/"><span class="logo-mark">{site.logo.mark}</span><span>{site.logo.first}<em>{site.logo.last}</em></span></a>
-    <nav id="site-nav" aria-label="メイン">{site.nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+    <nav id="site-nav" aria-label="メイン">{site.nav.map((n, i) => n.children?.length ? (
+      <div class="nav-group">
+        <button type="button" aria-expanded="false" aria-controls={`nav-sub-${i}`}>{n.label}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <ul class="nav-sub" id={`nav-sub-${i}`}>
+          {n.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
+        </ul>
+      </div>
+    ) : <a href={n.href}>{n.label}</a>)}</nav>
+    {site.search && <button class="search-toggle" type="button" aria-label="検索" aria-haspopup="dialog"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>}
     <button class="theme-toggle" type="button" aria-label="ダークモード切り替え"><span></span></button>
     <button class="menu-toggle" type="button" aria-label="メニュー" aria-controls="site-nav" aria-expanded="false"><span></span></button>
   </div>
@@ -27,8 +35,30 @@ import { site } from 'virtual:quanopy/config';
   header?.querySelector('nav')?.addEventListener('click', (e) => {
     if ((e.target as Element).closest('a')) setOpen(false);
   });
+  // ドロップダウン: マウスは乗せると開き(CSS)、クリックとキーボードは aria-expanded で開閉する
+  const groups = [...document.querySelectorAll<HTMLElement>('.nav-group')];
+  const closeGroups = (except?: HTMLElement) => {
+    for (const g of groups) if (g !== except) g.querySelector('button')?.setAttribute('aria-expanded', 'false');
+  };
+  for (const g of groups) {
+    const btn = g.querySelector('button')!;
+    btn.addEventListener('click', () => {
+      closeGroups(g);
+      btn.setAttribute('aria-expanded', String(btn.getAttribute('aria-expanded') !== 'true'));
+    });
+    g.addEventListener('focusout', (e) => {
+      if (e.relatedTarget && !g.contains(e.relatedTarget as Node)) btn.setAttribute('aria-expanded', 'false');
+    });
+    g.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape' || btn.getAttribute('aria-expanded') !== 'true') return;
+      e.stopPropagation();
+      btn.setAttribute('aria-expanded', 'false');
+      btn.focus();
+    });
+  }
   document.addEventListener('click', (e) => {
     if (!header?.contains(e.target as Node)) setOpen(false);
+    if (!(e.target as Element).closest('.nav-group')) closeGroups();
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen()) { setOpen(false); menu?.focus(); }

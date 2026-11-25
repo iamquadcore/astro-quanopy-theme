@@ -48,6 +48,51 @@ quanopy({
 })
 ```
 
+### ナビ
+
+`children` を書くとドロップダウンになります。
+
+```js
+nav: [
+  { label: 'Home', href: '/' },
+  { label: 'Topics', children: [{ label: 'Astro', href: '/tags/Astro/' }] },
+],
+```
+
+### 背景画像
+
+`hero` に配列を渡すとスライドショーになります。間隔は `heroInterval` (秒、既定: 7) です。
+
+```js
+hero: ['./src/assets/hero-1.jpg', './src/assets/hero-2.jpg'],
+```
+
+### OGP とサイトマップ
+
+OGP 画像は記事の `og_image`、`cover`、設定の `ogImage` の順に使います。大きさは 1200×630 を勧めます。説明文は記事の `description`、なければ書き出しです。固定ページでも `og_image` (`public/` からのパスか URL) と `description` を使えます。
+
+`img/covers/a.jpg` と `/img/covers/a.jpg` はどちらも `public/img/covers/a.jpg` を指します。`./` や `../` で始めると記事からの相対パスになります。
+
+```js
+ogImage: '/img/ogp.jpg',
+twitter: '@example',
+```
+
+ビルド時に `sitemap.xml` を作ります。`sitemap: false` でオフになります。
+
+### 検索
+
+ヘッダーの検索ボタンか Ctrl+K で開きます。`search: false` でオフになります。
+
+## 固定ページ
+
+`src/pages/` に Markdown を置き、`layout` を指定します。`404.md` も同じように作れます。
+
+```yaml
+layout: astro-quanopy-theme/layouts/Page.astro
+title: About
+```
+
 ## 記事
 
 `src/content/posts/` に Markdown を置きます。`permalink` がそのまま URL になります。
@@ -58,7 +103,7 @@ date: 2026-01-01
 permalink: 2026/01/01/my-post
 categories: Tech
 tags: [Astro]
-hidden: false # true にすると一覧に出ません
+hidden: false # true にすると一覧、検索、サイトマップに出ず、noindex になります
 ```
 
 画像は記事からの相対パスで書くと webp に変換されます。幅とクラスも指定できます。

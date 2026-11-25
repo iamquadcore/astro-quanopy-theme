@@ -1,0 +1,40 @@
+---
+import { site } from 'virtual:quanopy/config';
+const [first, ...others] = site.hero;
+---
+<div class="hero-bg" aria-hidden="true" data-interval={site.heroInterval}>
+  <img class="active" src={first.src} alt="" />
+  {others.map((h) => <img data-src={h.src} alt="" />)}
+</div>
+{others.length > 0 && (
+  <script is:inline>
+    {
+      const box = document.querySelector('.hero-bg');
+      const imgs = [...box.querySelectorAll('img')];
+      const load = (img) => {
+        if (img.dataset.src) { img.src = img.dataset.src; delete img.dataset.src; }
+        return img.decode().catch(() => {});
+      };
+      const show = (n) => imgs.forEach((img, i) => img.classList.toggle('active', i === n));
+      // 見ていた画像をページ移動後も引き継ぐ
+      let now = 0;
+      try { now = Number(sessionStorage.getItem('hero')) || 0; } catch {}
+      if (now >= imgs.length) now = 0;
+      if (now) { load(imgs[now]); show(now); }
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const next = () => setTimeout(async () => {
+          if (!document.hidden) {
+            const n = (now + 1) % imgs.length;
+            await load(imgs[n]);
+            if (imgs[n].naturalWidth) {
+              show(now = n);
+              try { sessionStorage.setItem('hero', n); } catch {}
+            }
+          }
+          next();
+        }, Math.max(2, Number(box.dataset.interval)) * 1000);
+        next();
+      }
+    }
+  </script>
+)}

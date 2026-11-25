@@ -1,0 +1,95 @@
+<dialog class="search" aria-label="サイト内検索">
+  <div class="search-box">
+    <div class="search-head">
+      <input type="text" enterkeyhint="search" placeholder="Search" aria-label="検索する言葉" autocomplete="off" />
+      <button type="button" aria-label="閉じる"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <p class="search-status" role="status"></p>
+    <ul class="search-results"></ul>
+  </div>
+</dialog>
+<script>
+  interface Entry { title: string; url: string; date: string; terms: string[]; text: string }
+  interface Indexed { entry: Entry; title: string; terms: string; text: string }
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.search')!;
+  const input = dialog.querySelector('input')!;
+  const status = dialog.querySelector<HTMLElement>('.search-status')!;
+  const list = dialog.querySelector<HTMLElement>('.search-results')!;
+  // 全角と半角、大文字と小文字を区別しない
+  const norm = (s: string) => s.normalize('NFKC').toLowerCase();
+
+  let index: Promise<Indexed[]> | undefined;
+  const load = () => {
+    if (index) return index;
+    index = fetch('/search.json')
+      .then((r) => { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+      .then((es: Entry[]) => es.map((entry) => {
+        const text = entry.text.normalize('NFKC');
+        return { entry: { ...entry, text }, title: norm(entry.title), terms: norm(entry.terms.join(' ')), text: text.toLowerCase() };
+      }));
+    // 失敗したら次に開いたときに取り直す
+    index.catch(() => { index = undefined; });
+    return index;
+  };
+
+  const snippet = (e: Indexed, words: string[]) => {
+    const found = words.map((w) => e.text.indexOf(w)).find((i) => i >= 0) ?? 0;
+    const at = Math.max(0, found - 30);
+    return (at > 0 ? '…' : '') + e.entry.text.slice(at, at + 110) + (at + 110 < e.entry.text.length ? '…' : '');
+  };
+
+  const add = (parent: HTMLElement, tag: string, text: string) => {
+    const el = document.createElement(tag);
+    el.textContent = text;
+    parent.append(el);
+  };
+
+  async function search() {
+    const query = input.value;
+    const words = norm(query).split(/\s+/).filter(Boolean);
+    if (!words.length) { list.replaceChildren(); status.textContent = ''; return; }
+    let all: Indexed[];
+    try { all = await load(); } catch { status.textContent = '検索の準備に失敗しました。'; return; }
+    if (query !== input.value) return;
+    // すべての言葉を含む記事だけを、題名、タグ、本文の順に重く数える
+    const score = (e: Indexed) => {
+      let n = 0;
+      for (const w of words) {
+        const s = (e.title.includes(w) ? 4 : 0) + (e.terms.includes(w) ? 2 : 0) + (e.text.includes(w) ? 1 : 0);
+        if (!s) return 0;
+        n += s;
+      }
+      return n;
+    };
+    const hits = all.map((e) => ({ e, n: score(e) })).filter((h) => h.n).sort((a, b) => b.n - a.n);
+    status.textContent = hits.length ? `${hits.length}件` : '見つかりませんでした。';
+    list.replaceChildren(...hits.map(({ e }) => {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = e.entry.url;
+      li.append(a);
+      add(a, 'strong', e.entry.title);
+      add(a, 'small', [e.entry.date, ...e.entry.terms].join(' • '));
+      add(a, 'span', snippet(e, words));
+      return li;
+    }));
+  }
+
+  const open = () => {
+    if (dialog.open) return;
+    dialog.showModal();
+    input.focus();
+    input.select();
+    load().catch(() => {});
+  };
+  document.querySelector('.search-toggle')?.addEventListener('click', open);
+  dialog.querySelector('button')?.addEventListener('click', () => dialog.close());
+  // 枠の外を押したら閉じる
+  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+  input.addEventListener('input', search);
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey && e.key.toLowerCase() === 'k') { e.preventDefault(); open(); }
+  });
+  // 戻るで復元されたとき、開いたままにしない
+  addEventListener('pagehide', () => dialog.close());
+</script>

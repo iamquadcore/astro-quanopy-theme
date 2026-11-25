@@ -2,6 +2,14 @@ import type { AstroIntegration } from 'astro';
 
 interface Link { label: string; href: string }
 
+interface NavLink {
+  label: string;
+  /** children があるときは省略できる */
+  href?: string;
+  /** ドロップダウンに並べるリンク */
+  children?: Link[];
+}
+
 interface SocialLink extends Link {
   /** Font Awesome のクラス (例: 'fa-brands fa-github')。省略すると label を文字で表示する */
   icon?: string;
@@ -28,10 +36,20 @@ export interface QuanopyOptions {
     since?: number;
   };
   info?: { key: string; value: string }[];
-  nav?: Link[];
+  nav?: NavLink[];
   social?: SocialLink[];
-  /** 背景画像。サイトのルートからのパス (例: './src/assets/hero.jpg') */
-  hero?: string;
+  /** 背景画像。サイトのルートからのパス (例: './src/assets/hero.jpg')。配列で複数渡すとスライドショーになる */
+  hero?: string | string[];
+  /** 背景画像が複数のとき、切り替える間隔の秒数 (既定: 7) */
+  heroInterval?: number;
+  /** 記事に画像がないときの OGP 画像 (推奨: 1200×630)。'./' で始めるとサイトのルートから、'/img/ogp.jpg' などは public/ からのパスか URL */
+  ogImage?: string;
+  /** X (Twitter) のユーザー名 (例: '@example')。カードの twitter:site と twitter:creator に使う */
+  twitter?: string;
+  /** サイト内検索 (既定: true) */
+  search?: boolean;
+  /** ビルド時に sitemap.xml を作る (既定: true) */
+  sitemap?: boolean;
   /** アバター画像。サイトのルートからのパス */
   avatar?: string;
 }

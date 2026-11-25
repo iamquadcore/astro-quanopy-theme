@@ -4,12 +4,26 @@ import '@fortawesome/fontawesome-free/css/brands.min.css';
 import '@fortawesome/fontawesome-free/css/regular.min.css';
 import '@fortawesome/fontawesome-free/css/solid.min.css';
 import '../styles/global.css';
+import Hero from '../components/Hero.astro';
+import Search from '../components/Search.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import Sidebar from '../components/Sidebar.astro';
+import { asOgImage, type OgImage } from '../lib/posts';
 import { site } from 'virtual:quanopy/config';
-interface Props { title?: string; heading?: string }
-const { title, heading = site.title } = Astro.props;
+interface Props {
+  title?: string;
+  heading?: string;
+  description?: string;
+  image?: OgImage;
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+const { title, heading = site.title, description = site.description, type = 'website', noindex = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? Astro.url);
+const image = Astro.props.image ?? (site.ogImage ? asOgImage(site.ogImage) : undefined);
+const imageUrl = image && new URL(image.src, canonical).href;
+const shareTitle = title ?? site.title;
 ---
 <!doctype html>
 <html lang="ja" class="dark">
@@ -17,8 +31,29 @@ const { title, heading = site.title } = Astro.props;
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="description" content={site.description} />
-    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={site.title} />
+    <meta property="og:title" content={shareTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    {image && (<Fragment>
+      <meta property="og:image" content={imageUrl} />
+      <meta property="og:image:alt" content={shareTitle} />
+      <meta property="og:image:width" content={String(image.width)} />
+      <meta property="og:image:height" content={String(image.height)} />
+      <meta name="twitter:image" content={imageUrl} />
+      <meta name="twitter:image:alt" content={shareTitle} />
+    </Fragment>)}
+    <meta name="twitter:title" content={shareTitle} />
+    <meta name="twitter:description" content={description} />
+    {site.twitter && (<Fragment>
+      <meta name="twitter:site" content={site.twitter} />
+      <meta name="twitter:creator" content={site.twitter} />
+    </Fragment>)}
+    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
     <title>{title ? title + ' | ' + site.title : site.title}</title>
     <script is:inline>
       try { if (localStorage.getItem('theme') === 'light') document.documentElement.classList.remove('dark'); } catch {}
@@ -37,7 +72,7 @@ const { title, heading = site.title } = Astro.props;
     </script>
   </head>
   <body>
-    <div class="hero-bg" aria-hidden="true"><img src={site.hero.src} alt="" /></div>
+    <Hero />
     <Header />
     <div class="page">
       <Sidebar />
@@ -47,5 +82,6 @@ const { title, heading = site.title } = Astro.props;
         <Footer />
       </main>
     </div>
+    {site.search && <Search />}
   </body>
 </html>

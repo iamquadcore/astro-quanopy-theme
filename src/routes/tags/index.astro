@@ -1,0 +1,11 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { countBy, getListedPosts, toSlug } from '../../lib/posts';
+const items = countBy(await getListedPosts(), 'tags');
+---
+<Layout title="Tags" heading="Tags">
+  <section>
+    <div class="section-head"><h2>Tags</h2><span>{String(items.length).padStart(2, '0')}</span></div>
+    <ul class="term-list">{items.map(([t, n]) => <li><a href={'/tags/' + toSlug(t) + '/'}>{t}（{n}）</a></li>)}</ul>
+  </section>
+</Layout>

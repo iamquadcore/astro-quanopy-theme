@@ -22,7 +22,8 @@
     "./content": {
       "types": "./content.d.ts",
       "default": "./content.mjs"
-    }
+    },
+    "./layouts/*": "./src/layouts/*"
   },
   "files": [
     "index.mjs",

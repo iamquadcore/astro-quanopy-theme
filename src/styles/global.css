@@ -335,13 +335,14 @@ body { padding-top: 10px; }
 .prose .img-center { margin-inline: auto; }
 .prose .img-right { margin-inline: auto 0; }
 .prose pre { overflow-x: auto; padding: 16px; border-radius: var(--radius); }
-.code-box { position: relative; }
-.code-box button { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid #ffffff40; border-radius: 8px; background: #24292ee6; color: #d5dce3; font-size: 14px; cursor: pointer; transition: opacity .2s; }
+/* コードブロック: 言語名とコピーボタンの下に線を引き、その下にコード */
+.code-box { margin: 1em 0; border-radius: var(--radius); background: #24292e; color: #d5dce3; overflow: hidden; }
+.prose .code-box pre { margin: 0; border-radius: 0; }
+.code-head { display: flex; align-items: center; justify-content: space-between; min-height: 40px; padding: 0 6px 0 16px; border-bottom: 1px solid #ffffff2e; }
+.code-lang { font-size: 13px; font-weight: 600; letter-spacing: .04em; }
+.code-box button { display: grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 8px; background: none; color: inherit; font-size: 14px; cursor: pointer; }
 .code-box button:hover, .code-box button.done { color: #92ce60; }
-@media (hover: hover) {
-  .code-box button { opacity: 0; }
-  .code-box:hover button, .code-box button:is(:focus-visible, .done) { opacity: 1; }
-}
+.code-box :focus-visible { outline-offset: -2px; }
 .prose .astro-code span[style*="#6A737D"] { color: #a3b1bd !important; } /* コメント */
 .prose iframe { max-width: 100%; border: 0; }
 .prose iframe:is([src*="youtube"], [width="560"][height="315"]) { height: auto; aspect-ratio: 16 / 9; }

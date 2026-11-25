@@ -1,15 +1,13 @@
 <script>
   // コードブロックにコピーボタンを付ける(クリップボードが使えない環境では付けない)
-  for (const pre of navigator.clipboard ? document.querySelectorAll<HTMLElement>('.prose pre') : []) {
-    const box = document.createElement('div');
-    box.className = 'code-box';
-    pre.replaceWith(box);
+  for (const box of navigator.clipboard ? document.querySelectorAll('.prose .code-box') : []) {
+    const pre = box.querySelector('pre')!;
     const btn = document.createElement('button');
     btn.type = 'button';
     const icon = document.createElement('i');
     icon.setAttribute('aria-hidden', 'true');
     btn.append(icon);
-    box.append(pre, btn);
+    box.querySelector('.code-head')!.append(btn);
     const state = (cls: string, label: string) => { icon.className = cls; btn.ariaLabel = btn.title = label; };
     const reset = () => { state('fa-regular fa-copy', 'コードをコピー'); btn.classList.remove('done'); };
     reset();

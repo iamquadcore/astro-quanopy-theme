@@ -1,7 +1,0 @@
----
-import Layout from '../layouts/Layout.astro';
-import PostGrid from '../components/PostGrid.astro';
-import { getListedPosts } from '../lib/posts';
-const posts = await getListedPosts();
----
-<Layout><PostGrid title="Newest Publications" posts={posts} /></Layout>

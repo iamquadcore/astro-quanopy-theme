@@ -1,9 +1,9 @@
 ---
-import { site } from '../site.config';
+import { site } from 'virtual:quanopy/config';
 import { countBy, getListedPosts, toSlug } from '../lib/posts';
 const tags = countBy(await getListedPosts(), 'tags');
 ---
-<aside class="sidebar">
+<aside class:list={['sidebar', { 'sidebar-scroll': site.sidebar.scroll }]}>
   <img class="avatar" src={site.author.avatar.src} alt="" width="104" height="104" />
   <p class="name">{site.author.name}</p>
   <p class="bio">{site.author.bio}</p>
@@ -14,3 +14,8 @@ const tags = countBy(await getListedPosts(), 'tags');
   <hr />
   <ul class="tags">{tags.map(([t, n]) => <li><a href={'/tags/' + toSlug(t) + '/'}>{t}（{n}）</a></li>)}</ul>
 </aside>
+<script>
+  // スクロールなしで画面より縦長のとき、下端まで見えてから追従させるために高さを渡す
+  const el = document.querySelector<HTMLElement>('.sidebar:not(.sidebar-scroll)');
+  if (el) new ResizeObserver(() => el.style.setProperty('--sidebar-actual', el.offsetHeight + 'px')).observe(el);
+</script>

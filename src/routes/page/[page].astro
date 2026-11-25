@@ -1,0 +1,12 @@
+---
+import Home from '../../components/Home.astro';
+import { site } from 'virtual:quanopy/config';
+import { getListedPosts, pageCount } from '../../lib/posts';
+
+// 1ページ目は / なので 2 ページ目以降だけを作る
+export async function getStaticPaths() {
+  const last = pageCount((await getListedPosts()).length, site.postsPerPage);
+  return Array.from({ length: last - 1 }, (_, i) => ({ params: { page: String(i + 2) } }));
+}
+---
+<Home page={Number(Astro.params.page)} />

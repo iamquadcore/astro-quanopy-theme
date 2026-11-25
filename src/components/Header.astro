@@ -1,16 +1,32 @@
 ---
-import { site } from '../site.config';
+import { site } from 'virtual:quanopy/config';
 ---
 <header class="header">
   <div class="header-inner">
     <a class="logo" href="/"><span class="logo-mark">{site.logo.mark}</span><span>{site.logo.first}<em>{site.logo.last}</em></span></a>
-    <nav aria-label="メイン">{site.nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
+    <nav id="site-nav" aria-label="メイン">{site.nav.map((n) => <a href={n.href}>{n.label}</a>)}</nav>
     <button class="theme-toggle" type="button" aria-label="ダークモード切り替え"><span></span></button>
+    <button class="menu-toggle" type="button" aria-label="メニュー" aria-controls="site-nav" aria-expanded="false"><span></span></button>
   </div>
 </header>
 <script>
   document.querySelector('.theme-toggle')?.addEventListener('click', () => {
     const dark = document.documentElement.classList.toggle('dark');
     try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch {}
+  });
+
+  const header = document.querySelector<HTMLElement>('.header');
+  const menu = document.querySelector<HTMLButtonElement>('.menu-toggle');
+  const isOpen = () => menu?.getAttribute('aria-expanded') === 'true';
+  const setOpen = (open: boolean) => menu?.setAttribute('aria-expanded', String(open));
+  menu?.addEventListener('click', () => setOpen(!isOpen()));
+  header?.querySelector('nav')?.addEventListener('click', (e) => {
+    if ((e.target as Element).closest('a')) setOpen(false);
+  });
+  document.addEventListener('click', (e) => {
+    if (!header?.contains(e.target as Node)) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen()) { setOpen(false); menu?.focus(); }
   });
 </script>

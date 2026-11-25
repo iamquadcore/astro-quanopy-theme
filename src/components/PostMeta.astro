@@ -1,0 +1,24 @@
+---
+import CalendarIcon from '../assets/icons/calendar-days.svg';
+import ClockIcon from '../assets/icons/clock.svg';
+import UserIcon from '../assets/icons/user.svg';
+import { site } from 'virtual:quanopy/config';
+import { formatMonthDay, formatTime } from '../lib/posts';
+interface Props { date: Date }
+const { date } = Astro.props;
+---
+<!-- Icons: Lucide (ISC), Copyright (c) Lucide Icons and Contributors / Feather (MIT), Copyright (c) Cole Bemis - https://lucide.dev/license -->
+<ul class="post-meta">
+  <li>
+    <CalendarIcon aria-hidden="true" />
+    <time datetime={date.toISOString().slice(0, 10)}>{formatMonthDay(date)}</time>
+  </li>
+  <li>
+    <ClockIcon aria-hidden="true" />
+    <span>{formatTime(date)}</span>
+  </li>
+  <li>
+    <UserIcon aria-hidden="true" />
+    <span>{site.author.name}</span>
+  </li>
+</ul>

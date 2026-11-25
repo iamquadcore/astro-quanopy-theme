@@ -1,17 +1,29 @@
 ---
-import { formatDate, formatTime, plainText, toArray, type Post } from '../lib/posts';
-interface Props { post: Post }
-const { post } = Astro.props;
-const { title, date, categories, permalink } = post.data;
+import { Image } from 'astro:assets';
+import { excerpt, formatDate, formatTime, plainText, toArray, type Post } from '../lib/posts';
+// row: 横長カード(画像が左)
+interface Props { post: Post; row?: boolean }
+const { post, row = false } = Astro.props;
+const { title, date, categories, permalink, cover } = post.data;
 const category = toArray(categories).join(' / ');
 const text = plainText(post.body);
+// 文字列の cover は / や http で始まるものだけ URL として使う
+const coverUrl = typeof cover === 'string' && /^(https?:)?\//.test(cover) ? cover : undefined;
 ---
-<article class="card">
-  <div class="card-cover" aria-hidden="true">{category}</div>
+<article class:list={['card', { 'card-row': row }]}>
+  <div class="card-cover">
+    {cover && typeof cover !== 'string' ? (
+      <Image src={cover} alt="" width={Math.min(cover.width, row ? 440 : 1086)} loading={row ? 'lazy' : 'eager'} />
+    ) : coverUrl ? (
+      <img src={coverUrl} alt="" loading="lazy" />
+    ) : (
+      <span aria-hidden="true">{category}</span>
+    )}
+  </div>
   <div class="card-body">
     <p class="card-category">{category}</p>
     <h3><a href={'/' + permalink + '/'}>{title}</a></h3>
-    <p class="card-excerpt">{text.slice(0, 160)}</p>
-    <p class="card-meta">{formatDate(date)} • {formatTime(date)} • {text.replace(/\s/g, '').length}</p>
+    <p class="card-excerpt">{excerpt(post.body)}</p>
+    <p class="card-meta">{formatDate(date)}{!row && <Fragment> • {formatTime(date)} • {text.replace(/\s/g, '').length}</Fragment>}</p>
   </div>
 </article>

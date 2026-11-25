@@ -1,0 +1,11 @@
+---
+import { site } from 'virtual:quanopy/config';
+const now = new Date().getFullYear();
+const since = site.footer.since;
+---
+<footer class="footer">
+  <span>© {since && since < now ? `${since} - ${now}` : now} {site.author.name}</span>
+  <span>
+    <a href="https://astro.build/" rel="noopener">Astro</a> | Theme - <a href="https://github.com/iamquadcore/astro-quanopy-theme" rel="noopener">Quanopy</a>
+  </span>
+</footer>

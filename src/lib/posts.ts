@@ -8,6 +8,8 @@ export async function getListedPosts() {
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
+export const pageCount = (total: number, per: number) => Math.max(1, Math.ceil(total / per));
+
 export const toArray = (v?: string | string[]) =>
   v === undefined ? [] : Array.isArray(v) ? v : [v];
 export const toSlug = (s: string) => s.trim().replace(/[\s_]+/g, '-');
@@ -23,7 +25,7 @@ export function countBy(posts: Post[], key: 'tags' | 'categories') {
 // Markdown 本文から見出し・目次・画像・記号を除いた地の文を取り出す
 export function plainText(body = '') {
   return body
-    .replace(/`{3}[\s\S]*?`{3}/g, ' ')
+    .replace(/^[ \t]*`{3}[^`\n]*\n[\s\S]*?^[ \t]*`{3}/gm, ' ')
     .replace(/<[^>]+>/g, ' ')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
     .replace(/^\s*[-*+]\s+(目次|\[[^\]]*\]\(#[^)]*\))\s*$/gm, ' ')
@@ -34,8 +36,20 @@ export function plainText(body = '') {
     .trim();
 }
 
+// 一覧用の書き出し。先頭の見出しを飛ばし、次の見出しの手前まで。
+// 導入文がない(目次や画像だけの)記事は、次に文章のある節を使う
+export function excerpt(body = '', max = 160) {
+  const sections = body.replace(/^[ \t]*`{3}[^`\n]*\n[\s\S]*?^[ \t]*`{3}/gm, ' ').split(/^#{1,6}\s.*$/m);
+  for (const section of sections) {
+    const text = plainText(section);
+    if (text) return text.slice(0, max);
+  }
+  return '';
+}
+
 const pad = (n: number) => String(n).padStart(2, '0');
 // front-matter の日付は UTC として読まれるため、UTC で出せば書いた日付のまま表示される
 export const formatDate = (d: Date) =>
   [d.getUTCFullYear() % 100, d.getUTCMonth() + 1, d.getUTCDate()].map(pad).join('/');
+export const formatMonthDay = (d: Date) => [d.getUTCMonth() + 1, d.getUTCDate()].map(pad).join('/');
 export const formatTime = (d: Date) => [d.getUTCHours(), d.getUTCMinutes()].map(pad).join(':');

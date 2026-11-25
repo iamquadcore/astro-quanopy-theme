@@ -27,6 +27,8 @@ export interface QuanopyOptions {
   featured?: number;
   /** 本文の1回の改行をそのまま改行として表示する (既定: true) */
   breaks?: boolean;
+  /** 見出しの ID の付け方。'hexo' にすると Hexo と同じ ID になり、移行前の目次やリンクがそのまま使える (既定: 'astro') */
+  headingIds?: 'astro' | 'hexo';
   sidebar?: {
     /** サイドバーを画面内に収め、あふれた分をスクロールバーで見せる (既定: true) */
     scroll?: boolean;

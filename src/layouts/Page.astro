@@ -1,5 +1,6 @@
 ---
 // 固定ページ用。src/pages/ の Markdown の layout に指定する
+import CopyCode from '../components/CopyCode.astro';
 import Layout from './Layout.astro';
 import { asOgImage } from '../lib/posts';
 interface Props { frontmatter: { title: string; description?: string; og_image?: string; noindex?: boolean } }
@@ -7,4 +8,5 @@ const { title, description, og_image, noindex } = Astro.props.frontmatter;
 ---
 <Layout title={title} heading={title} description={description} image={og_image ? asOgImage(og_image) : undefined} noindex={noindex}>
   <article class="prose"><slot /></article>
+  <CopyCode />
 </Layout>

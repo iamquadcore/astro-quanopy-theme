@@ -15,6 +15,7 @@ declare module 'virtual:quanopy/config' {
     postsPerPage: number;
     featured: number;
     breaks: boolean;
+    headingIds: 'astro' | 'hexo';
     sidebar: { scroll: boolean };
     footer: { since?: number };
     info: { key: string; value: string }[];

@@ -9,6 +9,7 @@ export default defineConfig({
   trailingSlash: 'always',
   integrations: [
     quanopy({
+      headingIds: 'hexo',
       ogImage: '/img/ogp.jpg',
       hero: ['./src/assets/hero-1.svg', './src/assets/hero-2.svg'],
       info: [{ key: 'Profile', value: 'Your profile' }],

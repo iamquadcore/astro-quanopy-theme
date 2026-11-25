@@ -11,6 +11,8 @@ export const defaults = {
   featured: 2,
   // 本文の1回の改行をそのまま改行として表示する
   breaks: true,
+  // 見出しの ID の付け方
+  headingIds: 'astro',
   // サイト内検索
   search: true,
   // sitemap.xml を作る

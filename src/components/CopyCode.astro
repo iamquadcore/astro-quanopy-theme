@@ -1,0 +1,29 @@
+<script>
+  // コードブロックにコピーボタンを付ける(クリップボードが使えない環境では付けない)
+  for (const pre of navigator.clipboard ? document.querySelectorAll<HTMLElement>('.prose pre') : []) {
+    const box = document.createElement('div');
+    box.className = 'code-box';
+    pre.replaceWith(box);
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    const icon = document.createElement('i');
+    icon.setAttribute('aria-hidden', 'true');
+    btn.append(icon);
+    box.append(pre, btn);
+    const state = (cls: string, label: string) => { icon.className = cls; btn.ariaLabel = btn.title = label; };
+    const reset = () => { state('fa-regular fa-copy', 'コードをコピー'); btn.classList.remove('done'); };
+    reset();
+    let timer: ReturnType<typeof setTimeout>;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText((pre.textContent ?? '').replace(/\n$/, ''));
+        state('fa-solid fa-check', 'コピーしました');
+        btn.classList.add('done');
+      } catch {
+        state('fa-solid fa-xmark', 'コピーできませんでした');
+      }
+      clearTimeout(timer);
+      timer = setTimeout(reset, 2000);
+    });
+  }
+</script>

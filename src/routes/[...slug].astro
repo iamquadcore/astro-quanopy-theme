@@ -2,6 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import { excerpt, ogImage } from '../lib/posts';
 import Layout from '../layouts/Layout.astro';
+import CopyCode from '../components/CopyCode.astro';
 import OtherArticles from '../components/OtherArticles.astro';
 import PostMeta from '../components/PostMeta.astro';
 
@@ -16,5 +17,6 @@ const { Content } = await render(post);
 <Layout title={post.data.title} heading={post.data.title} description={post.data.description || excerpt(post.body, 120) || undefined} image={await ogImage(post)} type="article" noindex={post.data.hidden}>
   <PostMeta date={post.data.date} />
   <article class="prose"><Content /></article>
+  <CopyCode />
   <OtherArticles post={post} />
 </Layout>

@@ -10,6 +10,8 @@
   --bg: #f0f6ee;
   --cover: #b5d3b1;
   --border: #1f3d1f55;
+  --shade: #1f3d1f1a; /* 引用、表の見出し、インラインコードの下地 */
+  --mark: #f3e27a; /* マーカー */
   --line: #1f3d1f; /* 見出しの下線とタグの縁 */
   /* レイアウト */
   --page-width: 1338px;
@@ -43,6 +45,8 @@
   --bg: #1d2c1e;
   --cover: #163818;
   --border: #ffffff55;
+  --shade: #00000033;
+  --mark: #dfd87a;
   --line: #1d2c1e; /* --bg と同じ色。var() で参照すると切り替えの途中で色が遅れる */
 }
 
@@ -56,6 +60,8 @@
 @property --cover { syntax: "<color>"; inherits: true; initial-value: transparent; }
 @property --border { syntax: "<color>"; inherits: true; initial-value: transparent; }
 @property --line { syntax: "<color>"; inherits: true; initial-value: transparent; }
+@property --shade { syntax: "<color>"; inherits: true; initial-value: transparent; }
+@property --mark { syntax: "<color>"; inherits: true; initial-value: transparent; }
 @media (prefers-reduced-motion: no-preference) {
   :root.theme-fade {
     transition:
@@ -67,7 +73,9 @@
     --bg var(--theme-fade),
     --cover var(--theme-fade),
     --border var(--theme-fade),
-    --line var(--theme-fade);
+    --line var(--theme-fade),
+    --shade var(--theme-fade),
+    --mark var(--theme-fade);
   }
   .theme-fade .theme-toggle span { transition: translate var(--theme-fade); }
 }
@@ -291,18 +299,52 @@ body { padding-top: 10px; }
 .prose h1 { font-size: var(--prose-h1); line-height: 1.4; }
 .prose h2 { font-size: var(--prose-h2); line-height: 1.4; }
 .prose h3 { font-size: var(--prose-h3); line-height: 1.4; }
-.prose :is(h4, h5, h6) { font-size: var(--prose-size); line-height: 1.4; }
+.prose :is(h4, h5, h6) { margin-block: 1.6em 1em; font-size: var(--prose-size); line-height: 1.4; }
+.prose h4 { font-size: calc(var(--prose-size) * 1.125); }
+.prose h6 { font-size: calc(var(--prose-size) * .9); opacity: .85; }
 .prose :is(h1, h2) { padding-bottom: .3em; border-bottom: 1px solid var(--line); }
 /* 小見出しの下線は文字のある幅だけ */
 .prose h3 { width: fit-content; padding-bottom: .2em; border-bottom: 1px solid var(--line); }
 .prose > :first-child { margin-top: 0; }
 .prose code { font-size: .85em; }
+.prose :not(pre) > code { padding: .15em .4em; border-radius: 5px; background: var(--shade); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.prose kbd { padding: .1em .45em; border: 1px solid var(--border); border-bottom-width: 3px; border-radius: 5px; background: var(--shade); font-size: .85em; }
+.prose mark { padding: 0 .2em; border-radius: 3px; background: var(--mark); color: #1f2c14; }
+.prose blockquote { margin: 1em 0; padding: .8em 1.2em; border-left: 4px solid var(--accent); border-radius: 0 8px 8px 0; background: var(--shade); }
+.prose blockquote > :first-child { margin-top: 0; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+/* 表: 収まらないときは表の中だけ横にスクロールする */
+.prose table { display: block; width: max-content; max-width: 100%; margin: 1em 0; overflow-x: auto; border-collapse: collapse; overflow-wrap: normal; scrollbar-width: thin; }
+.prose :is(th, td) { min-width: 4em; padding: .45em .9em; border: 1px solid var(--border); }
+.prose th { background: var(--shade); white-space: nowrap; }
+.prose td:first-child { min-width: 5.5em; }
+.prose .contains-task-list { padding-left: .3em; list-style: none; }
+.prose .contains-task-list .contains-task-list { padding-left: 1.6em; }
+.prose .task-list-item input { appearance: none; position: relative; width: 1.1em; height: 1.1em; margin: 0 .5em 0 0; border: 2px solid currentColor; border-radius: 4px; vertical-align: -.18em; }
+.prose .task-list-item input:checked { border-color: var(--accent); background: var(--accent); }
+.prose .task-list-item input:checked::after { content: ""; position: absolute; left: .26em; top: .02em; width: .25em; height: .55em; border: solid var(--bg); border-width: 0 2px 2px 0; rotate: 45deg; }
+/* 注釈 */
+.prose .footnotes { margin-top: 3em; padding-top: 1em; border-top: 2px dotted var(--border); font-size: .9em; }
+.prose .footnotes h2 { margin: 0 0 .6em; padding: 0; border: 0; font-size: var(--prose-size); }
+.prose .footnotes li p { margin: .4em 0; }
+.prose sup { line-height: 0; }
+/* 目次や注釈で移動したとき、固定のヘッダーに隠れないようにする */
+:root { scroll-padding-top: 110px; }
 .prose a { color: var(--link); text-decoration: underline; }
 .prose img { display: block; max-width: 100%; height: auto; margin: 1em auto 1em 0; }
 .prose .img-center { margin-inline: auto; }
 .prose .img-right { margin-inline: auto 0; }
 .prose pre { overflow-x: auto; padding: 16px; border-radius: var(--radius); }
-.prose iframe { max-width: 100%; }
+.code-box { position: relative; }
+.code-box button { position: absolute; top: 8px; right: 8px; display: grid; place-items: center; width: 32px; height: 32px; padding: 0; border: 1px solid #ffffff40; border-radius: 8px; background: #24292ee6; color: #d5dce3; font-size: 14px; cursor: pointer; transition: opacity .2s; }
+.code-box button:hover, .code-box button.done { color: #92ce60; }
+@media (hover: hover) {
+  .code-box button { opacity: 0; }
+  .code-box:hover button, .code-box button:is(:focus-visible, .done) { opacity: 1; }
+}
+.prose .astro-code span[style*="#6A737D"] { color: #a3b1bd !important; } /* コメント */
+.prose iframe { max-width: 100%; border: 0; }
+.prose iframe:is([src*="youtube"], [width="560"][height="315"]) { height: auto; aspect-ratio: 16 / 9; }
 
 .footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 24px; margin-top: 40px; padding: 20px 26px; border-radius: var(--radius); background: var(--panel); color: var(--panel-text); font-size: 14px; }
 .footer a { text-decoration: underline; }
@@ -323,6 +365,7 @@ body { padding-top: 10px; }
   .grid:not(.featured) { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 800px) {
+  :root { scroll-padding-top: 16px; }
   .hero-bg { inset-inline: 0; }
   .header { margin-inline: 10px; }
   .header { position: relative; top: 0; }
@@ -330,6 +373,9 @@ body { padding-top: 10px; }
   .sidebar { display: none; }
   .hero-text { min-height: 260px; padding: 0 0 50px; }
   .prose { padding: 20px; }
+  .prose h1 { font-size: min(var(--prose-h1), 28px); }
+  .prose h2 { font-size: min(var(--prose-h2), 24px); }
+  .prose h3 { font-size: min(var(--prose-h3), 20px); }
   .post-meta { gap: 10px; margin-bottom: 16px; }
   .post-meta li { padding: 16px 6px; font-size: 12px; letter-spacing: .04em; }
   .post-meta svg { width: 20px; height: 20px; margin-bottom: 6px; }

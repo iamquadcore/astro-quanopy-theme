@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
 import { defaults } from './src/defaults.mjs';
+import rehypeHexoHeadingIds from './src/plugins/rehype-hexo-heading-ids.mjs';
 import remarkImgAttrs from './src/plugins/remark-img-attrs.mjs';
 import remarkTightBlocks from './src/plugins/remark-tight-blocks.mjs';
 
@@ -64,7 +65,7 @@ export default function quanopy(options = {}) {
         }
 
         updateConfig({
-          markdown: { processor: unified({ remarkPlugins: site.breaks ? [remarkBreaks, remarkTightBlocks, remarkImgAttrs] : [remarkImgAttrs] }) },
+          markdown: { processor: unified({ remarkRehype: { footnoteLabel: '注釈', footnoteBackLabel: '本文に戻る' }, remarkPlugins: site.breaks ? [remarkBreaks, remarkTightBlocks, remarkImgAttrs] : [remarkImgAttrs], rehypePlugins: site.headingIds === 'hexo' ? [rehypeHexoHeadingIds] : [] }) },
           vite: {
             plugins: [
               {

@@ -17,6 +17,12 @@ export async function getRelatedPosts(post: Post, max = 2) {
   return posts.filter((p) => p.id !== post.id && toArray(p.data.tags).some((t) => tags.includes(t))).slice(0, max);
 }
 
+// 一覧ページの説明文。件数と新しい記事のタイトルを入れて、ページごとに違う文にする
+export function listDescription(label: string, posts: Post[], max = 120) {
+  const text = `${label}の記事 ${posts.length} 件: ${posts.map((p) => p.data.title).join('、')}`;
+  return text.length > max ? text.slice(0, max - 1) + '…' : text;
+}
+
 export const pageCount = (total: number, per: number) => Math.max(1, Math.ceil(total / per));
 
 export const toArray = (v?: string | string[]) =>

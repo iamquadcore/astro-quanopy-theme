@@ -9,7 +9,7 @@ const { page } = Astro.props;
 const posts = await getListedPosts();
 const start = (page - 1) * site.postsPerPage;
 ---
-<Layout title={page > 1 ? `Page ${page}` : undefined} heading={site.title}>
+<Layout title={page > 1 ? `Page ${page}` : undefined} heading={site.title} description={page > 1 ? `${site.description} (${page} ページ目)` : undefined}>
   <PostGrid title="Newest Publications" posts={posts.slice(start, start + site.postsPerPage)} number={page} featured={page === 1 ? site.featured : 0} />
   <Pagination current={page} last={pageCount(posts.length, site.postsPerPage)} />
 </Layout>

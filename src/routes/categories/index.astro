@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import { countBy, getListedPosts, toSlug } from '../../lib/posts';
 const items = countBy(await getListedPosts(), 'categories');
 ---
-<Layout title="Categories" heading="Categories">
+<Layout title="Categories" heading="Categories" description={`カテゴリの一覧 (${items.length} 件): ${items.map(([t]) => t).join("、")}`.slice(0, 120)}>
   <section>
     <div class="section-head"><h2>Categories</h2><span>{String(items.length).padStart(2, '0')}</span></div>
     <ul class="term-list">{items.map(([t, n]) => <li><a href={'/categories/' + toSlug(t) + '/'}>{t}（{n}）</a></li>)}</ul>

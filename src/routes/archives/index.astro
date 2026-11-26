@@ -2,8 +2,9 @@
 import ArchiveList from '../../components/ArchiveList.astro';
 import Layout from '../../layouts/Layout.astro';
 import { byYear, getListedPosts } from '../../lib/posts';
-const years = byYear(await getListedPosts());
+const posts = await getListedPosts();
+const years = byYear(posts);
 ---
-<Layout title="Archives" heading="Archives">
+<Layout title="Archives" heading="Archives" description={`全 ${posts.length} 件の記事を年ごとにまとめたアーカイブです (${years.map(([y]) => y).join("、")})`}>
   <ArchiveList years={years} />
 </Layout>

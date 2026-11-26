@@ -48,6 +48,8 @@ export interface QuanopyOptions {
   ogImage?: string;
   /** X (Twitter) のユーザー名 (例: '@example')。カードの twitter:site と twitter:creator に使う */
   twitter?: string;
+  /** Google アナリティクスの測定 ID (例: 'G-XXXXXXXXXX')。省略すると計測しない */
+  googleAnalytics?: string;
   /** サイト内検索 (既定: true) */
   search?: boolean;
   /** ビルド時に sitemap.xml を作る (既定: true) */

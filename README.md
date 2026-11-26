@@ -88,6 +88,10 @@ twitter: '@example',
 
 `/tags/`、`/categories/`、`/archives/` (年ごとは `/archives/2026/` など) は自動で作られます。
 
+### Google アナリティクス
+
+`googleAnalytics: 'G-XXXXXXXXXX'` のように測定 ID を渡すと、ビルドしたサイトで計測します。開発サーバーでは計測しません。
+
 ### 検索
 
 ヘッダーの検索ボタンか Ctrl+K で開きます。`search: false` でオフになります。

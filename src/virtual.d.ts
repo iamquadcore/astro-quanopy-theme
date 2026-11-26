@@ -10,6 +10,7 @@ declare module 'virtual:quanopy/config' {
     heroInterval: number;
     ogImage?: string | import('astro').ImageMetadata;
     twitter?: string;
+    googleAnalytics?: string;
     search: boolean;
     sitemap: boolean;
     postsPerPage: number;

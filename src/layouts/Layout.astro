@@ -4,6 +4,7 @@ import '@fortawesome/fontawesome-free/css/brands.min.css';
 import '@fortawesome/fontawesome-free/css/regular.min.css';
 import '@fortawesome/fontawesome-free/css/solid.min.css';
 import '../styles/global.css';
+import Analytics from '../components/Analytics.astro';
 import Hero from '../components/Hero.astro';
 import Search from '../components/Search.astro';
 import Header from '../components/Header.astro';
@@ -74,6 +75,7 @@ const shareTitle = title ?? site.title;
   <body>
     <Hero />
     <Header />
+    <Analytics />
     <div class="page">
       <Sidebar />
       <main>

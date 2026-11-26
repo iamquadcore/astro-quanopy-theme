@@ -17,6 +17,10 @@ export const defaults = {
   search: true,
   // sitemap.xml を作る
   sitemap: true,
+  // atom.xml (新着記事のフィード) を作る
+  feed: true,
+  // robots.txt を作る (public/robots.txt があればそちらを使う)
+  robots: true,
   // 背景画像が複数のとき、切り替える間隔 (秒)
   heroInterval: 7,
   // scroll: サイドバー内をスクロールさせる

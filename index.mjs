@@ -34,6 +34,7 @@ export default function quanopy(options = {}) {
   const ogFile = rest.ogImage?.startsWith('./') ? rest.ogImage : undefined;
   /** @type {string | undefined} */
   let siteUrl;
+  let base = '/';
 
   return {
     name: 'astro-quanopy-theme',
@@ -66,6 +67,8 @@ export default function quanopy(options = {}) {
           ['/archives', 'archives/index.astro'],
           ['/archives/[year]', 'archives/[year].astro'],
           ...(site.search ? [['/search.json', 'search.json.ts']] : []),
+          // フィードの URL は絶対 URL なので、site がないと作れない
+          ...(site.feed && config.site ? [['/atom.xml', 'atom.xml.ts']] : []),
           ['/tags/[tag]', 'tags/[tag].astro'],
           ['/categories/[category]', 'categories/[category].astro'],
           ['/[...slug]', '[...slug].astro'],
@@ -93,10 +96,19 @@ export default function quanopy(options = {}) {
       },
       'astro:config:done': ({ config, logger }) => {
         siteUrl = config.site;
+        base = config.base;
         if (!siteUrl) logger.warn('astro.config に site (公開先の URL) が未設定のため、canonical と og:url を出力しません');
       },
       // サイトマップ。404、2ページ目以降の一覧、noindex のページは載せない
       'astro:build:done': async ({ dir, pages, logger }) => {
+        // robots.txt。public/robots.txt を置いていればそれを優先する
+        const robots = new URL('robots.txt', dir);
+        const sitemapUrl = site.sitemap && siteUrl ? new URL(base.replace(/^\/?/, '/').replace(/\/?$/, '/') + 'sitemap.xml', siteUrl).href : undefined;
+        if (site.robots && !(await readFile(robots).then(() => true, () => false))) {
+          await writeFile(robots, ['User-agent: *', 'Allow: /', ...(sitemapUrl ? ['', `Sitemap: ${sitemapUrl}`] : []), ''].join('\n'));
+          logger.info('robots.txt');
+        }
+
         if (!site.sitemap) return;
         if (!siteUrl) return logger.warn('site が未設定のため sitemap.xml を作りません');
         const urls = [];

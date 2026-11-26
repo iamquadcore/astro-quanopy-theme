@@ -84,6 +84,8 @@ twitter: '@example',
 
 ビルド時に `sitemap.xml` を作ります。`sitemap: false` でオフになります。
 
+新着20件のフィード `atom.xml` と、サイトマップの場所を書いた `robots.txt` も作ります。それぞれ `feed: false`、`robots: false` でオフになります。`public/robots.txt` を置いた場合はそちらを使います。
+
 ### canonical (URL の正規化)
 
 `astro.config.mjs` の `site` を基準に、各ページへ `<link rel="canonical">` と `og:url` を自動で付けます。クエリやハッシュは除き、末尾のスラッシュは `trailingSlash` (`'ignore'` のときは `build.format`) に合わせます。404 と `noindex` のページには付けません。`site` が未設定のときは canonical・`og:url`・サイトマップを出力せず、ビルド時に警告します。

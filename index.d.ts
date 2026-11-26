@@ -54,6 +54,10 @@ export interface QuanopyOptions {
   search?: boolean;
   /** ビルド時に sitemap.xml を作る (既定: true) */
   sitemap?: boolean;
+  /** 新着記事のフィード atom.xml を作る (既定: true)。site が未設定なら作らない */
+  feed?: boolean;
+  /** robots.txt を作る (既定: true)。public/robots.txt があればそちらを使う */
+  robots?: boolean;
   /** アバター画像。サイトのルートからのパス */
   avatar?: string;
 }

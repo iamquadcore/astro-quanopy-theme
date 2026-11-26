@@ -46,6 +46,7 @@ const jsonLd = schema.length && JSON.stringify({ '@context': 'https://schema.org
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {site.feed && home && <link rel="alternate" type="application/atom+xml" title={site.title} href={new URL('atom.xml', home).href} />}
     <meta name="description" content={description} />
     {robotsNoindex && <meta name="robots" content="noindex" />}
     {canonical && <link rel="canonical" href={canonical.href} />}

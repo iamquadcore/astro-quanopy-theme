@@ -13,6 +13,8 @@ declare module 'virtual:quanopy/config' {
     googleAnalytics?: string;
     search: boolean;
     sitemap: boolean;
+    feed: boolean;
+    robots: boolean;
     postsPerPage: number;
     featured: number;
     breaks: boolean;

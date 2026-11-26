@@ -5,8 +5,10 @@
 ## インストール
 
 ```
-npm install github:iamquadcore/astro-quanopy-theme
+npm install github:iamquadcore/astro-quanopy-theme#v0.1.1
 ```
+
+`#v0.1.1` の部分でバージョンを固定します。使えるバージョンは [タグの一覧](https://github.com/iamquadcore/astro-quanopy-theme/tags) にあります。更新するときは新しいタグを指定して同じコマンドを実行してください。
 
 npm が `EALLOWGIT` で止まる場合は、サイト側の `.npmrc` に `allow-git=root` を書いてください。
 

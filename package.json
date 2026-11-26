@@ -2,6 +2,7 @@
   "name": "astro-quanopy-theme",
   "description": "An Astro blog theme with a sidebar and two-column post cards.",
   "type": "module",
+  "private": true,
   "version": "0.1.1",
   "license": "MIT",
   "keywords": [

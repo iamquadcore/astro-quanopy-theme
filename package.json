@@ -35,7 +35,8 @@
   "scripts": {
     "dev": "astro dev --root playground",
     "build": "astro build --root playground",
-    "preview": "astro preview --root playground"
+    "preview": "astro preview --root playground",
+    "check": "astro check --root playground"
   },
   "peerDependencies": {
     "astro": "^7.4.4"
@@ -47,6 +48,9 @@
     "unist-util-visit": "^5.2.0"
   },
   "devDependencies": {
-    "astro": "^7.4.4"
+    "@astrojs/check": "^0.9.12",
+    "@types/node": "^22.20.7",
+    "astro": "^7.4.4",
+    "typescript": "^6.0.3"
   }
 }

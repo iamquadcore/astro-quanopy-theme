@@ -154,7 +154,7 @@ npm install
 npm run dev
 ```
 
-`playground/` のサンプルサイトが開きます。配色、レイアウト幅、背景の高さとグラデーション開始位置は `src/styles/global.css` 冒頭の変数で変えられます。
+`playground/` のサンプルサイトが開きます。`npm run check` で型を検査できます。配色、レイアウト幅、背景の高さとグラデーション開始位置は `src/styles/global.css` 冒頭の変数で変えられます。
 
 ## ライセンス
 

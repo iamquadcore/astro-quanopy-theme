@@ -306,9 +306,26 @@ body { padding-top: 10px; }
 .pagination a[aria-current] { background: var(--primary); color: #1f3d1f; }
 
 /* 記事の日付・時刻・著者 */
-.post-meta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 0 0 24px; padding: 0; list-style: none; text-align: center; }
+.post-meta { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 24px; margin: 0 0 24px; padding: 0; list-style: none; text-align: center; }
 .post-meta li { padding: 34px 12px; border-radius: var(--radius); background: var(--panel); color: var(--panel-text); backdrop-filter: blur(6px); box-shadow: 0 2px 6px #0003; font-size: 13px; font-weight: 700; letter-spacing: .12em; overflow-wrap: anywhere; }
 .post-meta svg { display: block; width: 26px; height: 26px; margin: 0 auto 14px; }
+.post-updated { display: block; margin-top: 4px; font-size: 11px; opacity: .8; }
+
+/* 記事のカテゴリとタグ */
+.post-terms { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin-top: 24px; padding: 18px 24px; border-radius: var(--radius); background: var(--panel); color: var(--panel-text); font-size: 14px; }
+.post-terms p { display: flex; align-items: center; gap: 8px; margin: 0; font-weight: 700; }
+.post-terms p a:hover, .post-terms .tags a:hover { color: var(--accent); }
+.post-terms .tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+/* 前後の記事 */
+.post-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: 24px; }
+.post-nav a { display: grid; gap: 6px; padding: 18px 24px; border-radius: var(--radius); background: var(--panel); color: var(--panel-text); box-shadow: 0 2px 6px #0003; }
+.post-nav a:hover span { color: var(--accent); }
+.post-nav small { font-size: 12px; letter-spacing: .08em; }
+.post-nav span { font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
+.post-nav-newer { grid-column: 2; text-align: right; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .prose { padding: 40px; font-size: var(--prose-size); border-radius: var(--radius); background: var(--panel); color: var(--panel-text); backdrop-filter: blur(6px); overflow-wrap: anywhere; }
 .prose :is(h1, h2, h3, h4, h5, h6) { font-weight: var(--prose-heading-weight); }
@@ -396,6 +413,9 @@ body { padding-top: 10px; }
   .post-meta { gap: 10px; margin-bottom: 16px; }
   .post-meta li { padding: 16px 6px; font-size: 12px; letter-spacing: .04em; }
   .post-meta svg { width: 20px; height: 20px; margin-bottom: 6px; }
+  .post-meta { grid-auto-flow: row; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .post-nav { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .post-nav-newer { grid-column: auto; }
 }
 @media (max-width: 560px) {
   .header-inner { column-gap: 6px; padding-inline: 14px; }

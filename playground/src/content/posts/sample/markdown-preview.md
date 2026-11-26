@@ -1,6 +1,7 @@
 ---
 title: Markdown の表示テスト
 date: 2026-01-25
+updated: 2026-02-10
 permalink: 2026/01/25/sample/markdown-preview
 description: 見出し、コードブロック、注釈、表など、記事で使う書き方の見え方をまとめた確認用の記事です。
 categories: Tech

@@ -1,0 +1,23 @@
+---
+// 時系列で前後の記事へのリンク
+import Icon from './Icon.astro';
+import { formatDate, getAdjacentPosts, type Post } from '../lib/posts';
+interface Props { post: Post }
+const { newer, older } = await getAdjacentPosts(Astro.props.post);
+---
+{(newer || older) && (
+  <nav class="post-nav" aria-label="前後の記事">
+    {older ? (
+      <a class="post-nav-older" href={`/${older.data.permalink}/`} rel="prev">
+        <small><Icon name="fa-solid fa-chevron-left" /> 前の記事 · {formatDate(older.data.date)}</small>
+        <span>{older.data.title}</span>
+      </a>
+    ) : null}
+    {newer && (
+      <a class="post-nav-newer" href={`/${newer.data.permalink}/`} rel="next">
+        <small>{formatDate(newer.data.date)} · 次の記事 <Icon name="fa-solid fa-chevron-right" /></small>
+        <span>{newer.data.title}</span>
+      </a>
+    )}
+  </nav>
+)}

@@ -23,6 +23,17 @@ export function listDescription(label: string, posts: Post[], max = 120) {
   return text.length > max ? text.slice(0, max - 1) + '…' : text;
 }
 
+// 時系列で前後の記事。一覧に出さない記事 (hidden) は前後を持たない
+export async function getAdjacentPosts(post: Post) {
+  const posts = await getListedPosts();
+  const i = posts.findIndex((p) => p.id === post.id);
+  if (i < 0) return { newer: undefined, older: undefined };
+  return { newer: posts[i - 1], older: posts[i + 1] };
+}
+
+// 読了時間の目安 (分)。日本語は1分に約500字として数える
+export const readingMinutes = (body = '') => Math.max(1, Math.round(plainText(body).length / 500));
+
 export const pageCount = (total: number, per: number) => Math.max(1, Math.ceil(total / per));
 
 export const toArray = (v?: string | string[]) =>

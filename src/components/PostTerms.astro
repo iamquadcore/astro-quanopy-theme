@@ -1,0 +1,23 @@
+---
+// 記事のカテゴリとタグ。それぞれの一覧ページへのリンクにする
+import Icon from './Icon.astro';
+import { toArray, toSlug, type Post } from '../lib/posts';
+interface Props { post: Post }
+const categories = toArray(Astro.props.post.data.categories);
+const tags = toArray(Astro.props.post.data.tags);
+---
+{(categories.length > 0 || tags.length > 0) && (
+  <div class="post-terms">
+    {categories.length > 0 && (
+      <p>
+        <Icon name="fa-regular fa-folder-open" /><span class="sr-only">カテゴリ</span>
+        {categories.map((c) => <a href={`/categories/${toSlug(c)}/`}>{c}</a>)}
+      </p>
+    )}
+    {tags.length > 0 && (
+      <ul class="tags" aria-label="タグ">
+        {tags.map((t) => <li><a href={`/tags/${toSlug(t)}/`}>#{t}</a></li>)}
+      </ul>
+    )}
+  </div>
+)}

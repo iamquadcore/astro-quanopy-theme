@@ -1,22 +1,32 @@
 ---
+import BookIcon from '../assets/icons/book-open.svg';
 import CalendarIcon from '../assets/icons/calendar-days.svg';
 import ClockIcon from '../assets/icons/clock.svg';
 import UserIcon from '../assets/icons/user.svg';
 import { site } from 'virtual:quanopy/config';
 import { formatDate, formatTime } from '../lib/posts';
-interface Props { date: Date }
-const { date } = Astro.props;
+interface Props { date: Date; updated?: Date; minutes?: number }
+const { date, updated, minutes } = Astro.props;
+// 投稿日と同じ日の更新は出さない
+const showUpdated = updated && formatDate(updated) !== formatDate(date);
 ---
 <!-- Icons: Lucide (ISC), Copyright (c) Lucide Icons and Contributors / Feather (MIT), Copyright (c) Cole Bemis - https://lucide.dev/license -->
 <ul class="post-meta">
   <li>
     <CalendarIcon aria-hidden="true" />
     <time datetime={date.toISOString().slice(0, 10)}>{formatDate(date)}</time>
+    {showUpdated && <span class="post-updated">更新 <time datetime={updated.toISOString().slice(0, 10)}>{formatDate(updated)}</time></span>}
   </li>
   <li>
     <ClockIcon aria-hidden="true" />
     <span>{formatTime(date)}</span>
   </li>
+  {minutes && (
+    <li>
+      <BookIcon aria-hidden="true" />
+      <span>約 {minutes} 分</span>
+    </li>
+  )}
   <li>
     <UserIcon aria-hidden="true" />
     <span>{site.author.name}</span>

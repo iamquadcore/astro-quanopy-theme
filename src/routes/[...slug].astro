@@ -1,11 +1,13 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { excerpt, ogImage, toArray, toSlug } from '../lib/posts';
+import { excerpt, ogImage, readingMinutes, toArray, toSlug } from '../lib/posts';
 import { site } from 'virtual:quanopy/config';
 import Layout from '../layouts/Layout.astro';
 import CopyCode from '../components/CopyCode.astro';
 import OtherArticles from '../components/OtherArticles.astro';
 import PostMeta from '../components/PostMeta.astro';
+import PostNav from '../components/PostNav.astro';
+import PostTerms from '../components/PostTerms.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -51,8 +53,10 @@ const schema = home ? [
 ] : [];
 ---
 <Layout title={title} heading={title} description={description} image={image} type="article" noindex={post.data.hidden} article={{ published: date, modified: updated, tags }} schema={schema}>
-  <PostMeta date={post.data.date} />
+  <PostMeta date={date} updated={updated} minutes={readingMinutes(post.body)} />
   <article class="prose"><Content /></article>
+  <PostTerms post={post} />
   <CopyCode />
+  <PostNav post={post} />
   <OtherArticles post={post} />
 </Layout>

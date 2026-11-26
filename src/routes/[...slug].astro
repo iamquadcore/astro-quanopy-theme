@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { excerpt, ogImage } from '../lib/posts';
+import { excerpt, ogImage, toArray, toSlug } from '../lib/posts';
+import { site } from 'virtual:quanopy/config';
 import Layout from '../layouts/Layout.astro';
 import CopyCode from '../components/CopyCode.astro';
 import OtherArticles from '../components/OtherArticles.astro';
@@ -13,8 +14,43 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const { title, date, updated } = post.data;
+const description = post.data.description || excerpt(post.body, 120) || undefined;
+const image = await ogImage(post);
+const tags = toArray(post.data.tags);
+const category = toArray(post.data.categories)[0];
+
+// 構造化データ: 記事 (BlogPosting) とパンくず (BreadcrumbList)
+const home = Astro.site && new URL(import.meta.env.BASE_URL, Astro.site).href;
+const url = home && new URL(Astro.url.pathname, Astro.site).href;
+const abs = (path: string) => home && new URL(path.replace(/^\//, ''), home).href;
+const schema = home ? [
+  {
+    '@type': 'BlogPosting',
+    '@id': url + '#article',
+    mainEntityOfPage: url,
+    headline: title,
+    ...(description && { description }),
+    ...(image && { image: new URL(image.src, home).href }),
+    datePublished: date.toISOString(),
+    dateModified: (updated ?? date).toISOString(),
+    author: { '@id': home + '#author', '@type': 'Person', name: site.author.name, url: home },
+    publisher: { '@id': home + '#author' },
+    inLanguage: 'ja',
+    ...(tags.length && { keywords: tags.join(', ') }),
+    ...(category && { articleSection: category }),
+  },
+  {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { name: 'Home', item: home },
+      ...(category ? [{ name: category, item: abs(`/categories/${toSlug(category)}/`) }] : []),
+      { name: title, item: url },
+    ].map((x, i) => ({ '@type': 'ListItem', position: i + 1, ...x })),
+  },
+] : [];
 ---
-<Layout title={post.data.title} heading={post.data.title} description={post.data.description || excerpt(post.body, 120) || undefined} image={await ogImage(post)} type="article" noindex={post.data.hidden}>
+<Layout title={title} heading={title} description={description} image={image} type="article" noindex={post.data.hidden} article={{ published: date, modified: updated, tags }} schema={schema}>
   <PostMeta date={post.data.date} />
   <article class="prose"><Content /></article>
   <CopyCode />

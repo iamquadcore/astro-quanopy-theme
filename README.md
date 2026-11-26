@@ -120,6 +120,7 @@ title: About
 ```yaml
 title: タイトル
 date: 2026-01-01
+updated: 2026-02-01 # 省略可。更新日として構造化データと OGP に使います
 permalink: 2026/01/01/my-post
 categories: Tech
 tags: [Astro]

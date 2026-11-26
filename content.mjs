@@ -10,6 +10,7 @@ export const postSchema = ({ image }) => {
   return z.object({
     title: z.string(),
     date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
     permalink: z.string(),
     tags: strings,
     categories: strings,

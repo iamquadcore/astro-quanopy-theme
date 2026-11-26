@@ -10,6 +10,7 @@ type OptionalString = z.ZodOptional<z.ZodString>;
 export declare const postSchema: (context: SchemaContext) => z.ZodObject<{
   title: z.ZodString;
   date: z.ZodCoercedDate;
+  updated: z.ZodOptional<z.ZodCoercedDate>;
   permalink: z.ZodString;
   tags: Strings;
   categories: Strings;

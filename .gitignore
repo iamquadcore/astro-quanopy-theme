@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# unpublished posts and work in progress (kept locally, never built or committed)
+temporary/

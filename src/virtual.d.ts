@@ -19,6 +19,7 @@ declare module 'virtual:quanopy/config' {
     featured: number;
     breaks: boolean;
     headingIds: 'astro' | 'hexo';
+    demoteHeadings: boolean;
     sidebar: { scroll: boolean };
     footer: { since?: number };
     info: { key: string; value: string }[];

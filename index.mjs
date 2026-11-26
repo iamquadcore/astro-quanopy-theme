@@ -7,6 +7,7 @@ import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
 import { defaults } from './src/defaults.mjs';
 import rehypeCodeHeader from './src/plugins/rehype-code-header.mjs';
+import rehypeDemoteHeadings from './src/plugins/rehype-demote-headings.mjs';
 import rehypeHexoHeadingIds from './src/plugins/rehype-hexo-heading-ids.mjs';
 import remarkImgAttrs from './src/plugins/remark-img-attrs.mjs';
 import remarkTightBlocks from './src/plugins/remark-tight-blocks.mjs';
@@ -79,7 +80,7 @@ export default function quanopy(options = {}) {
         updateConfig({
           // 記事内やカードの画像に srcset を付け、画面に合った大きさを選ばせる。サイト側の設定があればそちらを優先する
           ...(config.image.layout ? {} : { image: { layout: 'constrained', responsiveStyles: config.image.responsiveStyles ?? true } }),
-          markdown: { processor: unified({ remarkRehype: { footnoteLabel: '注釈', footnoteBackLabel: '本文に戻る' }, remarkPlugins: site.breaks ? [remarkBreaks, remarkTightBlocks, remarkImgAttrs] : [remarkImgAttrs], rehypePlugins: site.headingIds === 'hexo' ? [rehypeCodeHeader, rehypeHexoHeadingIds] : [rehypeCodeHeader] }) },
+          markdown: { processor: unified({ remarkRehype: { footnoteLabel: '注釈', footnoteBackLabel: '本文に戻る' }, remarkPlugins: site.breaks ? [remarkBreaks, remarkTightBlocks, remarkImgAttrs] : [remarkImgAttrs], rehypePlugins: [rehypeCodeHeader, ...(site.headingIds === 'hexo' ? [rehypeHexoHeadingIds] : []), ...(site.demoteHeadings ? [rehypeDemoteHeadings] : [])] }) },
           vite: {
             plugins: [
               {

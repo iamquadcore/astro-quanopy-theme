@@ -29,6 +29,8 @@ export interface QuanopyOptions {
   breaks?: boolean;
   /** 見出しの ID の付け方。'hexo' にすると Hexo と同じ ID になり、移行前の目次やリンクがそのまま使える (既定: 'astro') */
   headingIds?: 'astro' | 'hexo';
+  /** 本文に h1 があるとき、本文の見出しを全部1段下げてページの h1 をタイトルだけにする (既定: true) */
+  demoteHeadings?: boolean;
   sidebar?: {
     /** サイドバーを画面内に収め、あふれた分をスクロールバーで見せる (既定: true) */
     scroll?: boolean;

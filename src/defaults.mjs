@@ -13,6 +13,8 @@ export const defaults = {
   breaks: true,
   // 見出しの ID の付け方
   headingIds: 'astro',
+  // 本文に h1 があれば見出しを1段下げる
+  demoteHeadings: true,
   // サイト内検索
   search: true,
   // sitemap.xml を作る

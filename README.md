@@ -23,6 +23,8 @@ export default defineConfig({
 });
 ```
 
+このテーマは、ドメイン直下に公開し (`base` を使わない)、URL の末尾に `/` を付ける (`trailingSlash: 'always'`) 構成を前提にしています。テーマ内のリンクは `/tags/Astro/` のように書いているので、サブフォルダに公開したり `trailingSlash: 'never'` にしたりすると、リンクが切れたり canonical と食い違ったりします。
+
 `src/content.config.ts`
 
 ```ts

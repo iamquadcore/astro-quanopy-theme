@@ -49,7 +49,8 @@ export default function quanopy(options = {}) {
           `site.hero = [${heroes.map((_, i) => `hero${i}`).join(', ')}];`,
           ...(ogFile ? ['site.ogImage = ogImage;'] : []),
           'site.author.avatar = avatar;',
-          'export { site };',
+          `const urlFormat = ${JSON.stringify({ trailingSlash: config.trailingSlash, format: config.build.format })};`,
+          'export { site, urlFormat };',
         ].join('\n');
 
         for (const [pattern, file] of [
@@ -83,8 +84,9 @@ export default function quanopy(options = {}) {
           },
         });
       },
-      'astro:config:done': ({ config }) => {
+      'astro:config:done': ({ config, logger }) => {
         siteUrl = config.site;
+        if (!siteUrl) logger.warn('astro.config に site (公開先の URL) が未設定のため、canonical と og:url を出力しません');
       },
       // サイトマップ。404、2ページ目以降の一覧、noindex のページは載せない
       'astro:build:done': async ({ dir, pages, logger }) => {

@@ -80,6 +80,10 @@ twitter: '@example',
 
 ビルド時に `sitemap.xml` を作ります。`sitemap: false` でオフになります。
 
+### canonical (URL の正規化)
+
+`astro.config.mjs` の `site` を基準に、各ページへ `<link rel="canonical">` と `og:url` を自動で付けます。クエリやハッシュは除き、末尾のスラッシュは `trailingSlash` (`'ignore'` のときは `build.format`) に合わせます。404 と `noindex` のページには付けません。`site` が未設定のときは canonical・`og:url`・サイトマップを出力せず、ビルド時に警告します。
+
 ### 見出しの ID
 
 `headingIds: 'hexo'` にすると、見出しの ID が Hexo と同じ形 (大文字を保つ) になります。Hexo から移した記事の目次や、外部からの `#` 付きリンクがそのまま使えます。

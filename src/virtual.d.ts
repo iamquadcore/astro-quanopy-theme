@@ -23,4 +23,6 @@ declare module 'virtual:quanopy/config' {
     nav: { label: string; href?: string; children?: Link[] }[];
     social: (Link & { icon?: string })[];
   };
+  /** URL の末尾スラッシュの扱い。astro.config の trailingSlash と build.format */
+  export const urlFormat: { trailingSlash: 'always' | 'never' | 'ignore'; format: 'directory' | 'file' | 'preserve' };
 }

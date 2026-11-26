@@ -38,7 +38,7 @@ const schema = home && !robotsNoindex ? [
   ...(canonical?.href === home ? [{ '@type': 'WebSite', '@id': home + '#website', url: home, name: site.title, description: site.description, inLanguage: 'ja', publisher: { '@id': home + '#author' } }, person] : []),
   ...(Astro.props.schema ?? []),
 ] : [];
-const jsonLd = schema.length && JSON.stringify({ '@context': 'https://schema.org', '@graph': schema }).replace(/</g, '\\u003c');
+const jsonLd = schema.length > 0 && JSON.stringify({ '@context': 'https://schema.org', '@graph': schema }).replace(/</g, '\\u003c');
 ---
 <!doctype html>
 <html lang="ja" class="dark">

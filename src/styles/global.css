@@ -31,7 +31,7 @@
   --heading-weight: 800;
   --prose-heading-weight: 700;
   --radius: 10px;
-  --theme-fade: .7s; /* ライトとダークの切り替えにかける時間 */
+  --theme-fade: .5s; /* ライトとダークの切り替えにかける時間 */
   --page-fade: .35s; /* ページの切り替えにかける時間 */
   --page-rise: 24px; /* 新しいページの本文が浮き上がる距離 */
 }

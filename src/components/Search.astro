@@ -1,8 +1,11 @@
+---
+import Icon from './Icon.astro';
+---
 <dialog class="search" aria-label="サイト内検索">
   <div class="search-box">
     <div class="search-head">
       <input type="text" enterkeyhint="search" placeholder="Search" aria-label="検索する言葉" autocomplete="off" />
-      <button type="button" aria-label="閉じる"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <button type="button" aria-label="閉じる"><Icon name="fa-solid fa-xmark" /></button>
     </div>
     <p class="search-status" role="status"></p>
     <ul class="search-results"></ul>

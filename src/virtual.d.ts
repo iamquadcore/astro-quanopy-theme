@@ -24,5 +24,7 @@ declare module 'virtual:quanopy/config' {
     social: (Link & { icon?: string })[];
   };
   /** URL の末尾スラッシュの扱い。astro.config の trailingSlash と build.format */
+  /** Font Awesome の SVG があるディレクトリ */
+  export const iconDir: string;
   export const urlFormat: { trailingSlash: 'always' | 'never' | 'ignore'; format: 'directory' | 'file' | 'preserve' };
 }

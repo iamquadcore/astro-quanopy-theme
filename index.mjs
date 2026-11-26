@@ -1,5 +1,7 @@
 // @ts-check
 import { readFile, writeFile } from 'node:fs/promises';
+import { createRequire } from 'node:module';
+import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { unified } from '@astrojs/markdown-remark';
 import remarkBreaks from 'remark-breaks';
@@ -12,6 +14,8 @@ import remarkTightBlocks from './src/plugins/remark-tight-blocks.mjs';
 const VIRTUAL_ID = 'virtual:quanopy/config';
 const toPath = (/** @type {URL} */ url) => fileURLToPath(url).replaceAll('\\', '/');
 const here = (/** @type {string} */ p) => new URL(p, import.meta.url);
+// Font Awesome の SVG の置き場所。ビルド時に読み込んでインライン SVG にする
+const iconDir = dirname(createRequire(import.meta.url).resolve('@fortawesome/fontawesome-free/package.json')).replaceAll('\\', '/') + '/svgs';
 
 /**
  * @param {import('./index').QuanopyOptions} [options]
@@ -50,7 +54,8 @@ export default function quanopy(options = {}) {
           ...(ogFile ? ['site.ogImage = ogImage;'] : []),
           'site.author.avatar = avatar;',
           `const urlFormat = ${JSON.stringify({ trailingSlash: config.trailingSlash, format: config.build.format })};`,
-          'export { site, urlFormat };',
+          `const iconDir = ${JSON.stringify(iconDir)};`,
+          'export { site, urlFormat, iconDir };',
         ].join('\n');
 
         for (const [pattern, file] of [

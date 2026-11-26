@@ -1,18 +1,19 @@
 ---
 import { site } from 'virtual:quanopy/config';
+import Icon from './Icon.astro';
 ---
 <header class="header">
   <div class="header-inner">
     <a class="logo" href="/"><span class="logo-mark">{site.logo.mark}</span><span>{site.logo.first}<em>{site.logo.last}</em></span></a>
     <nav id="site-nav" aria-label="メイン">{site.nav.map((n, i) => n.children?.length ? (
       <div class="nav-group">
-        <button type="button" aria-expanded="false" aria-controls={`nav-sub-${i}`}>{n.label}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <button type="button" aria-expanded="false" aria-controls={`nav-sub-${i}`}>{n.label}<Icon name="fa-solid fa-chevron-down" /></button>
         <ul class="nav-sub" id={`nav-sub-${i}`}>
           {n.children.map((c) => <li><a href={c.href}>{c.label}</a></li>)}
         </ul>
       </div>
     ) : <a href={n.href}>{n.label}</a>)}</nav>
-    {site.search && <button class="search-toggle" type="button" aria-label="検索" aria-haspopup="dialog"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i></button>}
+    {site.search && <button class="search-toggle" type="button" aria-label="検索" aria-haspopup="dialog"><Icon name="fa-solid fa-magnifying-glass" /></button>}
     <button class="theme-toggle" type="button" aria-label="ダークモード切り替え"><span></span></button>
     <button class="menu-toggle" type="button" aria-label="メニュー" aria-controls="site-nav" aria-expanded="false"><span></span></button>
   </div>

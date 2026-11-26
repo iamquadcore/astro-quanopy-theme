@@ -1,24 +1,31 @@
+---
+import Icon from './Icon.astro';
+---
+<template id="copy-icons">
+  <span data-state="copy"><Icon name="fa-regular fa-copy" /></span>
+  <span data-state="done"><Icon name="fa-solid fa-check" /></span>
+  <span data-state="fail"><Icon name="fa-solid fa-xmark" /></span>
+</template>
 <script>
   // コードブロックにコピーボタンを付ける(クリップボードが使えない環境では付けない)
+  const icons = document.querySelector<HTMLTemplateElement>('#copy-icons')!.content;
+  const iconOf = (s: string) => icons.querySelector(`[data-state="${s}"] svg`)!;
   for (const box of navigator.clipboard ? document.querySelectorAll('.prose .code-box') : []) {
     const pre = box.querySelector('pre')!;
     const btn = document.createElement('button');
     btn.type = 'button';
-    const icon = document.createElement('i');
-    icon.setAttribute('aria-hidden', 'true');
-    btn.append(icon);
     box.querySelector('.code-head')!.append(btn);
-    const state = (cls: string, label: string) => { icon.className = cls; btn.ariaLabel = btn.title = label; };
-    const reset = () => { state('fa-regular fa-copy', 'コードをコピー'); btn.classList.remove('done'); };
+    const state = (s: string, label: string) => { btn.replaceChildren(iconOf(s).cloneNode(true)); btn.ariaLabel = btn.title = label; };
+    const reset = () => { state('copy', 'コードをコピー'); btn.classList.remove('done'); };
     reset();
     let timer: ReturnType<typeof setTimeout>;
     btn.addEventListener('click', async () => {
       try {
         await navigator.clipboard.writeText((pre.textContent ?? '').replace(/\n$/, ''));
-        state('fa-solid fa-check', 'コピーしました');
+        state('done', 'コピーしました');
         btn.classList.add('done');
       } catch {
-        state('fa-solid fa-xmark', 'コピーできませんでした');
+        state('fail', 'コピーできませんでした');
       }
       clearTimeout(timer);
       timer = setTimeout(reset, 2000);

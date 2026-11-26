@@ -1,0 +1,7 @@
+---
+// Font Awesome のアイコンをインライン SVG で出す。例: <Icon name="fa-solid fa-xmark" />
+import { faIcon } from '../lib/icons';
+interface Props { name: string }
+const svg = faIcon(Astro.props.name);
+---
+{svg && <Fragment set:html={svg} />}

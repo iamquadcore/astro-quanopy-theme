@@ -74,6 +74,8 @@ export default function quanopy(options = {}) {
         }
 
         updateConfig({
+          // 記事内やカードの画像に srcset を付け、画面に合った大きさを選ばせる。サイト側の設定があればそちらを優先する
+          ...(config.image.layout ? {} : { image: { layout: 'constrained', responsiveStyles: config.image.responsiveStyles ?? true } }),
           markdown: { processor: unified({ remarkRehype: { footnoteLabel: '注釈', footnoteBackLabel: '本文に戻る' }, remarkPlugins: site.breaks ? [remarkBreaks, remarkTightBlocks, remarkImgAttrs] : [remarkImgAttrs], rehypePlugins: site.headingIds === 'hexo' ? [rehypeCodeHeader, rehypeHexoHeadingIds] : [rehypeCodeHeader] }) },
           vite: {
             plugins: [

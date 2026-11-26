@@ -67,6 +67,10 @@ nav: [
 hero: ['./src/assets/hero-1.jpg', './src/assets/hero-2.jpg'],
 ```
 
+### 画像の最適化
+
+背景画像・アバター・記事内やカードの画像は、ビルド時に WebP へ変換し、画面に合わせた複数のサイズ (`srcset`) を作ります。元の画像は大きいまま置いておいて構いません。背景画像の1枚目は最優先で読み込みます。記事内の画像は Astro の `image.layout: 'constrained'` を使っています。`astro.config.mjs` で `image.layout` を指定すると、そちらが優先されます。
+
 ### OGP とサイトマップ
 
 OGP 画像は記事の `og_image`、`cover`、設定の `ogImage` の順に使います。大きさは 1200×630 を勧めます。説明文は記事の `description`、なければ書き出しです。固定ページでも `og_image` (`public/` からのパスか URL) と `description` を使えます。

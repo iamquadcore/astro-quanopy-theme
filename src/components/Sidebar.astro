@@ -1,11 +1,17 @@
 ---
 import { site } from 'virtual:quanopy/config';
+import { getImage } from 'astro:assets';
 import { faIcon } from '../lib/icons';
 import { countBy, getListedPosts, toSlug } from '../lib/posts';
 const tags = countBy(await getListedPosts(), 'tags');
+// 表示は 104px。高解像度の画面向けに 2 倍まで用意する (SVG はそのまま)
+const avatar = site.author.avatar;
+const avatarImg = avatar.format === 'svg'
+  ? { src: avatar.src, srcSet: { attribute: undefined } }
+  : await getImage({ src: avatar, width: 104, height: 104, fit: 'cover', densities: [1, 2], format: 'webp' });
 ---
 <aside class:list={['sidebar', { 'sidebar-scroll': site.sidebar.scroll }]}>
-  <img class="avatar" src={site.author.avatar.src} alt="" width="104" height="104" />
+  <img class="avatar" src={avatarImg.src} srcset={avatarImg.srcSet.attribute} sizes="104px" alt="" width="104" height="104" decoding="async" />
   <p class="name">{site.author.name}</p>
   <p class="bio">{site.author.bio}</p>
   <hr />

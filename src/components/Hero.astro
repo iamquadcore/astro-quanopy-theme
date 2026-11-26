@@ -1,10 +1,19 @@
 ---
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import { site } from 'virtual:quanopy/config';
-const [first, ...others] = site.hero;
+// 背景は画面幅いっぱいに敷くので、画面幅に合ったサイズの WebP を選ばせる (元画像より大きくはしない)
+const optimize = async (img: ImageMetadata) => {
+  if (img.format === 'svg') return { src: img.src, srcset: undefined };
+  const widths = [640, 1280, 1920, 2560].filter((w) => w < img.width).concat(Math.min(img.width, 3840));
+  const out = await getImage({ src: img, widths, format: 'webp' });
+  return { src: out.src, srcset: out.srcSet.attribute };
+};
+const [first, ...others] = await Promise.all(site.hero.map(optimize));
 ---
 <div class="hero-bg" aria-hidden="true" data-interval={site.heroInterval}>
-  <img class="active" src={first.src} alt="" />
-  {others.map((h) => <img data-src={h.src} alt="" />)}
+  <img class="active" src={first.src} srcset={first.srcset} sizes="100vw" alt="" fetchpriority="high" decoding="async" />
+  {others.map((h) => <img data-src={h.src} data-srcset={h.srcset} sizes="100vw" alt="" decoding="async" />)}
 </div>
 {others.length > 0 && (
   <script is:inline>
@@ -12,7 +21,12 @@ const [first, ...others] = site.hero;
       const box = document.querySelector('.hero-bg');
       const imgs = [...box.querySelectorAll('img')];
       const load = (img) => {
-        if (img.dataset.src) { img.src = img.dataset.src; delete img.dataset.src; }
+        if (img.dataset.src) {
+          if (img.dataset.srcset) img.srcset = img.dataset.srcset;
+          img.src = img.dataset.src;
+          delete img.dataset.src;
+          delete img.dataset.srcset;
+        }
         return img.decode().catch(() => {});
       };
       const show = (n) => imgs.forEach((img, i) => img.classList.toggle('active', i === n));
